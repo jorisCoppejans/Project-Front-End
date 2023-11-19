@@ -1,8 +1,44 @@
 import Collection from './Collection';
 import { COLLECTIONS_DATA } from '../../assets/data/mock_data';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useContext } from 'react';
 import CollectionsForm from './CollectionsForm';
+import { ThemeContext } from '../../contexts/Theme.context';
  
+
+function CollectionTable({
+  collections
+}) {
+  const { theme } = useContext(ThemeContext);
+  
+  if (collections.length === 0) {
+    return (
+      <div className="alert alert-info">
+        There are no collections yet.
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <table className={`table table-hover table-responsive table-${theme}`}>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>UserId</th>
+            <th>Value</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {collections.map((collection) => (
+            <Collection key={collection.id} {...collection} />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 
 export default function CollectionList() {
 
@@ -12,20 +48,12 @@ export default function CollectionList() {
 
   {/*Filteren van de collecties*/}
   const filteredCollections = useMemo(() => collections.filter((c) => {
-    console.log('filtering...');
-    return c.id.includes(search);
-  }) ,[search, collections]);
+   return c.id.includes(search);
+  }), [search, collections]);
 
   {/*creeeren van nieuwe collectie en alles teruggeven */}
   const createCollection = useCallback((id, userId, value) => {
-    const newCollections = [
-      {
-        id,
-        userId,
-        value,
-      },
-      ...collections,
-    ];
+    const newCollections = [{id, userId, value}, ...collections];
     setCollections(newCollections);
     console.log('collections', JSON.stringify(collections));
     console.log('newCollections', JSON.stringify(newCollections));
@@ -49,13 +77,11 @@ export default function CollectionList() {
         <button
           type="button"
           className="btn btn-outline-primary"
-          onClick={() => setSearch(text)}
-        >
-          Search
-        </button>
+          onClick={() => setSearch(text)}>Search</button>
       </div>
-      {filteredCollections.sort((a, b) => a.id-b.id).map((colls, index) =>
-        <Collection {...colls} key={index} /> )}
+      <div className="mt-4">
+        <CollectionTable collections={filteredCollections} />
+      </div>
     </>
   );
 }

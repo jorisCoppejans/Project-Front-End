@@ -36,27 +36,27 @@ let COLLECTIONS_DATA = [
 let COINS_DATA = [
   {
     id : '001',
-    naam: 'Bitcoin',
+    name: 'Bitcoin',
     value: 34000,
     collectionId: '001',
     favorite: true
   },
   {
     id : '002',
-    naam: 'Ethereum',
+    name: 'Ethereum',
     value: 1800,
     collectionId: '001',
     favorite: true
   },
   {
     id : '003',
-    naam: 'BNB',
+    name: 'BNB',
     value: 200,
     collectionId: '001'
   },
   {
     id : '004',
-    naam: 'Random',
+    name: 'Random',
     value: 200,
     collectionId: '002'
   }

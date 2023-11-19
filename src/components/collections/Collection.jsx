@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { COINS_DATA } from '../../assets/data/mock_data';
 import Coin from '../coins/Coin';
+import { memo } from 'react';
 
-
-// src/components/transactions/Transaction.jsx
-import { memo } from 'react'; // 👈
-
-export default memo(function Transaction(props) { // 👈
+export default memo(function Collection(props) {
   const { id, userId, value} = props;
-  console.log('Rendering transaction...');
+  console.log('Rendering collection...');
 
   const [coins, setCoins] = useState(COINS_DATA);
   
@@ -19,14 +16,14 @@ export default memo(function Transaction(props) { // 👈
 
   return (
   <>
-  <div className="text-bg-dark" >{id}</div>
-  <div className='row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-3'>
+  <tr>
+  <td>{id}</td>
+  <td>{userId}</td>
+  <td>€ {value}</td>
+  </tr>
     {coins.filter((c) => c.collectionId === id).map((c) => (
-      <div className='col' key={c.id}>
-        <Coin {...c} onFavo={handleFavoriteCoin}/>
-      </div>
+      <Coin key = {c.id} {...c} onFavo={handleFavoriteCoin}/>
     ))}
-  </div>
   </>
   );
 });

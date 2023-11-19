@@ -56,19 +56,6 @@ export default memo(function CollectionForm({ onSaveCollection }) {
           />
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="Value" className="form-label">Value</label>
-          <input
-            {...register('Value')}
-            defaultValue=''
-            id="Value"
-            type="text"
-            className="form-control"
-            placeholder="Value"
-            required
-          />
-        </div>
-
         <div className='clearfix'>
           <div className='btn-group float-end'>
             <button type='submit' className='btn btn-primary'>
