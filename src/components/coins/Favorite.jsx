@@ -16,7 +16,7 @@ export default function Favorite({
   selectedFavorite = 0,
   onFavo,
 }) {
-
+  
   return (
     <>
       {[...new Array(totalFavo)].map((_, i) => (

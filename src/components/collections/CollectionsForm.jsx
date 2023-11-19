@@ -2,6 +2,24 @@ import { memo } from 'react';
 import { useForm } from 'react-hook-form';
 import { COLLECTIONS_DATA } from '../../assets/data/mock_data';
 
+//validationRules
+const validationRules = {
+  id: {
+    required: "id is required",
+    validate: (value) => {
+      const isUnique = isIdUnique(value);
+      return isUnique || 'This id has already been used';
+    }
+  }
+};
+
+//unique values
+const isIdUnique = (id) => {
+  const collections = COLLECTIONS_DATA;
+  const ids = collections.map((c) => c.id);
+  return !ids.includes(id);
+};
+
 export default memo(function CollectionForm({ onSaveCollection }) {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
@@ -10,14 +28,7 @@ export default memo(function CollectionForm({ onSaveCollection }) {
     const { id, userId, value } = data;
     onSaveCollection(id, userId, value);
     reset();
-  };
-
-  const isIdUnique = (id) => {
-    const collections = COLLECTIONS_DATA;
-    const ids = collections.map((c) => c.id);
-    return !ids.includes(id);
-  };
-  
+  };  
 
   return (
     <>
@@ -26,13 +37,7 @@ export default memo(function CollectionForm({ onSaveCollection }) {
         <div className="mb-3">
           <label htmlFor="id" className="form-label">Id</label>
           <input
-            {...register('id', {
-              required: "id is required",
-              validate: (value) => {
-                const isUnique = isIdUnique(value);
-                return isUnique || 'This id has already been used';
-              }
-            })}
+            {...register('id', validationRules.id)}
             defaultValue=''
             id="id"
             type="text"

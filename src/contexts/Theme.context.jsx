@@ -6,7 +6,6 @@ export const themes = {
 }
 
 export const ThemeContext = createContext();
-
 export const useTheme = () => useContext(ThemeContext);
 
 export const useThemeColors = () => {
@@ -26,7 +25,6 @@ export const ThemeProvider = ({
   }, [theme]);
 
   const oppositeTheme = useMemo(() => theme === themes.dark ? themes.light : themes.dark, [theme]);
-
   const value = useMemo(()=> ({ theme, oppositeTheme, toggleTheme }), [theme, oppositeTheme, toggleTheme]);
 
   return (
@@ -35,3 +33,4 @@ export const ThemeProvider = ({
     </ThemeContext.Provider>
   );
 };
+

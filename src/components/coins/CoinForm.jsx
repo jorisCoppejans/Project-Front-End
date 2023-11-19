@@ -1,28 +1,47 @@
 import { COINS_DATA } from '../../assets/data/mock_data';
 import { useForm } from 'react-hook-form';
 
-export default function CoinForm({ onSaveCoin }) {
+//validationrules for the form
+const validationRules = {
+  id: {
+    required: "id is required",
+    validate: (value) => {
+      const isUnique = isIdUnique(value);
+      return isUnique || 'This id has already been used';
+    }
+  },
+  name: {
+    required: "name is required",
+    validate: (value) => {
+      const isUnique = isNameUnique(value);
+      return isUnique || 'This name has already been used';
+    }
+  }
+};
 
+//methodes for unique values
+const isIdUnique = (id) => {
+  const collections = COINS_DATA;
+  const ids = collections.map((c) => c.id);
+  return !ids.includes(id);
+};
+
+const isNameUnique = (name) => {
+  const collections = COINS_DATA;
+  const names = collections.map((c) => c.name);
+  return !names.includes(name);
+};
+
+
+export default function CoinForm({ onSaveCoin }) {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+  //other methodes
   const onSubmit = (data) => {
     console.log(JSON.stringify(data));
-    const { id, naam, value, collectionId, favorite } = data;
-    onSaveCoin(id, naam, value, collectionId, favorite);
+    const { id, name, value, collectionId, favorite } = data;
+    onSaveCoin(id, name, value, collectionId, favorite);
     reset();
-  };
-
-
-  const isIdUnique = (id) => {
-    const collections = COINS_DATA;
-    const ids = collections.map((c) => c.id);
-    return !ids.includes(id);
-  };
-
-  const isNameUnique = (name) => {
-    const collections = COINS_DATA;
-    const names = collections.map((c) => c.naam);
-    return !names.includes(name);
   };
 
   return (
@@ -32,13 +51,7 @@ export default function CoinForm({ onSaveCoin }) {
       <div className="mb-3">
           <label htmlFor="id" className="form-label">Id</label>
           <input
-            {...register('id', {
-              required: "id is required",
-              validate: (value) => {
-                const isUnique = isIdUnique(value);
-                return isUnique || 'This id has already been used';
-              }
-            })}
+            {...register('id', validationRules.id)}
             defaultValue=''
             id="id"
             type="text"
@@ -50,20 +63,14 @@ export default function CoinForm({ onSaveCoin }) {
         </div>
         
         <div className="mb-3">
-          <label htmlFor="Naam" className="form-label">Naam</label>
+          <label htmlFor="Name" className="form-label">Name</label>
           <input
-            {...register('naam', {
-              required: "naam is required",
-              validate: (value) => {
-                const isUnique = isNameUnique(value);
-                return isUnique || 'This name has already been used';
-              }
-            })}
+            {...register('name', validationRules.name)}
             defaultValue=''
-            id="Naam"
+            id="Name"
             type="text"
             className="form-control"
-            placeholder="Naam"
+            placeholder="Name"
             required
           />
         </div>
@@ -115,5 +122,5 @@ export default function CoinForm({ onSaveCoin }) {
         </div>
       </form>
     </>
-  );
-}
+  )
+};

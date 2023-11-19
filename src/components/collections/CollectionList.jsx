@@ -4,11 +4,11 @@ import CollectionsForm from './CollectionsForm';
 import { ThemeContext } from '../../contexts/Theme.context';
 import { useState, useMemo, useCallback, useContext } from 'react';
 
+
 function CollectionTable({
   collections
 }) {
   const { theme } = useContext(ThemeContext);
-  
   if (collections.length === 0) {
     return (
       <div className="alert alert-info">
@@ -40,31 +40,29 @@ function CollectionTable({
 
 
 export default function CollectionList() {
-
   const [collections, setCollections] = useState(COLLECTIONS_DATA);
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
 
-  {/*Filteren van de collecties*/}
+  //Filtering of collections
   const filteredCollections = useMemo(() => collections.filter((c) => {
    return c.id.includes(search);
   }), [search, collections]);
 
-  {/*creeeren van nieuwe collectie en alles teruggeven */}
+  //create new collection
   const createCollection = useCallback((id, userId, value) => {
     const newCollections = [{id, userId, value}, ...collections];
     setCollections(newCollections);
     console.log('collections', JSON.stringify(collections));
     console.log('newCollections', JSON.stringify(newCollections));
   }, [collections]);
-  
 
   return (
     <>
       <h1>Collections</h1>
       <CollectionsForm onSaveCollection={createCollection} />
       
-          {/*filterknopje*/}
+      {/*filterButton*/}
       <div className="input-group mb-3 w-50">
         <input
           type="search"
