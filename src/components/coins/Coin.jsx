@@ -1,24 +1,25 @@
 import Favorite from "./Favorite";
-import { memo } from "react";
+import { useThemeColors } from '../../contexts/Theme.context';
+import { memo } from 'react';
 
 export default memo(function Coin({id, name, collectionId, value, favorite, onFavo}) {
+  const { theme, oppositeTheme } = useThemeColors();
+
   const handleFavoriteCoin = (newfavorite) => {
     onFavo(id, newfavorite);
   };
 
   const indentedTextStyle = {
-    textIndent: '2em',
+    textIndent: '4em',
   };
 
   return (
-  <tr>
-  <td style={indentedTextStyle}>
-    {name} met id: {id} is van collectie {collectionId} en heeft een waarde van €{value}
-  </td>
-  <td>
-    <Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} />
-  </td>
-  </tr>
+      <tr style={indentedTextStyle} className={`bg-${theme} border-${oppositeTheme}`}>
+      <td>{name}</td>
+      <td>{id}</td>
+      <td>{value}</td>
+      <td><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
+      </tr>
     
   );
 });

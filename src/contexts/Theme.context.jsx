@@ -1,5 +1,4 @@
-// src/contexts/Theme.context.jsx
-import {createContext,useState,useCallback,useMemo} from 'react';
+import {createContext,useState,useCallback,useMemo,useContext} from 'react';
 
 export const themes = {
   dark: "dark",
@@ -7,6 +6,13 @@ export const themes = {
 }
 
 export const ThemeContext = createContext();
+
+export const useTheme = () => useContext(ThemeContext);
+
+export const useThemeColors = () => {
+  const { theme, oppositeTheme } = useContext(ThemeContext);
+  return { theme, oppositeTheme };
+};
 
 export const ThemeProvider = ({
   children

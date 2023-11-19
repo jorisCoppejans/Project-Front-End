@@ -1,9 +1,8 @@
 import Collection from './Collection';
 import { COLLECTIONS_DATA } from '../../assets/data/mock_data';
-import { useState, useMemo, useCallback, useContext } from 'react';
 import CollectionsForm from './CollectionsForm';
 import { ThemeContext } from '../../contexts/Theme.context';
- 
+import { useState, useMemo, useCallback, useContext } from 'react';
 
 function CollectionTable({
   collections
@@ -25,7 +24,7 @@ function CollectionTable({
           <tr>
             <th>Id</th>
             <th>UserId</th>
-            <th>Value</th>
+            <th>Total value</th>
             <th></th>
           </tr>
         </thead>
@@ -71,7 +70,7 @@ export default function CollectionList() {
           type="search"
           id="search"
           className="form-control rounded"
-          placeholder="Search"
+          placeholder="Filter collections on id"
           value={text}
           onChange={(e) => setText(e.target.value)} />
         <button
