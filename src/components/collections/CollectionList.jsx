@@ -1,13 +1,16 @@
 import Collection from './Collection';
-import { COLLECTIONS_DATA } from '../../assets/data/mock_data';
 import CollectionsForm from './CollectionsForm';
 import { ThemeContext } from '../../contexts/Theme.context';
 import { useState, useMemo, useCallback, useContext } from 'react';
+import * as CollectionsApi from '../../api'
+import AsyncData from '../AsyncData';
+import { set } from 'react-hook-form';
+import useSWR from 'swr';
+import { getAll, deleteById } from '../../api';
+import useSWRMutation from 'swr/mutation';
 
 
-function CollectionTable({
-  collections
-}) {
+function CollectionTable({collections, onDelete, onEdit}) {
   const { theme } = useContext(ThemeContext);
   if (collections.length === 0) {
     return (
@@ -29,8 +32,8 @@ function CollectionTable({
           </tr>
         </thead>
         <tbody>
-          {collections.map((collection) => (
-            <Collection key={collection.id} {...collection} />
+          {collections.sort().map((collection) => (
+            <Collection key={collection.id} onDelete = {onDelete} onEdit = {onEdit} {...collection} />
           ))}
         </tbody>
       </table>
@@ -40,27 +43,31 @@ function CollectionTable({
 
 
 export default function CollectionList() {
-  const [collections, setCollections] = useState(COLLECTIONS_DATA);
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
+  const {data: collections = [], isLoading, error} = useSWR('collections', getAll);
+  const { trigger: deleteCollection, error: deleteError } = useSWRMutation('collections', deleteById);
+  const [currentCollection, setCurrentCollection] = useState({});
 
   //Filtering of collections
   const filteredCollections = useMemo(() => collections.filter((c) => {
-   return c.id.includes(search);
+    return String(c.id).includes(search);
   }), [search, collections]);
 
   //create new collection
-  const createCollection = useCallback((id, userId, value) => {
-    const newCollections = [{id, userId, value}, ...collections];
-    setCollections(newCollections);
-    console.log('collections', JSON.stringify(collections));
-    console.log('newCollections', JSON.stringify(newCollections));
+  const createCollection = useCallback((id, userId) => {
+    const newCollections = [{id, userId}, ...collections];
+  }, [collections]);
+
+  const setCollectionToUpdate = useCallback((id) => {
+    setCurrentCollection(id === null ? {} : collections.find((t) => t.id === id));
   }, [collections]);
 
   return (
     <>
       <h1>Collections</h1>
-      <CollectionsForm onSaveCollection={createCollection} />
+      <CollectionsForm setCollectionToUpdate = {setCollectionToUpdate} currentCollection = {currentCollection}/>
+
       
       {/*filterButton*/}
       <div className="input-group mb-3 w-50">
@@ -77,7 +84,12 @@ export default function CollectionList() {
           onClick={() => setSearch(text)}>Search</button>
       </div>
       <div className="mt-4">
-        <CollectionTable collections={filteredCollections} />
+      <AsyncData loading={isLoading} error={error || deleteError}>
+        {!error ? <CollectionTable 
+        collections={filteredCollections} 
+        onDelete={deleteCollection} 
+        onEdit = {setCollectionToUpdate}/> : null}
+      </AsyncData>
       </div>
     </>
   );

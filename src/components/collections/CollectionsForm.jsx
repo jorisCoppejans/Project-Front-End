@@ -1,6 +1,10 @@
-import { memo } from 'react';
-import { useForm } from 'react-hook-form';
+import { memo, useCallback } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { COLLECTIONS_DATA } from '../../assets/data/mock_data';
+import useSWRMutation from 'swr/mutation';
+import { save } from '../../api';
+import Error from '../Error';
+import { useEffect } from 'react';
 
 //validationRules
 const validationRules = {
@@ -20,34 +24,68 @@ const isIdUnique = (id) => {
   return !ids.includes(id);
 };
 
-export default memo(function CollectionForm({ onSaveCollection }) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+function LabelInput({ label, name, type, ...rest }) {
+  const {
+    register,
+    errors,
+    isSubmitting
+  } = useFormContext();
 
-  const onSubmit = (data) => {
-    console.log(JSON.stringify(data));
-    const { id, userId, value } = data;
-    onSaveCollection(id, userId, value);
-    reset();
-  };  
+  const hasError = name in errors;
 
   return (
-    <>
-      <h2>Add collection</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
-        <div className="mb-3">
-          <label htmlFor="id" className="form-label">Id</label>
-          <input
-            {...register('id', validationRules.id)}
-            defaultValue=''
-            id="id"
-            type="text"
-            className="form-control"
-            placeholder="id"
-            required
-          />
-          {errors.id && <p className="form-text text-danger">{errors.id.message}</p> }
+    <div className="mb-3">
+      <label htmlFor={name} className="form-label">
+        {label}
+      </label>
+      <input
+        {...register(name, validationRules[name])}
+        id={name}
+        type={type}
+        disabled={isSubmitting}
+        className="form-control"
+        {...rest}
+      />
+      {hasError ? (
+        <div className="form-text text-danger">
+          {errors[name].message}
         </div>
+      ) : null}
+    </div>
+  );
+}
 
+export default function CollectionForm({currentCollection, setCollectionToUpdate}) {
+  const { register, handleSubmit, reset, setValue, formState: { errors }, isSubmitting } = useForm();
+  const {trigger: saveCollection, error: saveError} = useSWRMutation('collections', save); 
+
+  const onSubmit = useCallback(async (data) => {
+    const { userId } = data
+    await saveCollection({id: currentCollection?.id, userId: userId, value: 0});
+    setCollectionToUpdate(null)
+  }, [reset, saveCollection]);
+
+  useEffect(() => {
+    if (
+      // check on non-empty object
+      currentCollection &&
+      (Object.keys(currentCollection).length !== 0 ||
+          currentCollection.constructor !== Object)
+    ) {
+      setValue("id", currentCollection.id);
+      setValue("userId", currentCollection.userId);
+      setValue("value", currentCollection.value);
+    } else {
+      reset();
+    }
+  }, [currentCollection, setValue, reset]);
+  
+
+  return (
+    <FormProvider handleSubmit={handleSubmit} errors={errors} register={register} isSubmitting={isSubmitting}>
+      <h2>Add collection</h2>
+      <Error error={saveError} />
+      <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
         <div className="mb-3">
           <label htmlFor="userId" className="form-label">userId</label>
           <input
@@ -68,7 +106,14 @@ export default memo(function CollectionForm({ onSaveCollection }) {
             </button>
           </div>
         </div>
+
+        <button type='submit' className='btn btn-primary' disabled={isSubmitting}>
+          {currentCollection?.id
+          ? "Save collection"
+          : "Add collection"}
+        </button>
+
       </form>
-    </>
+    </FormProvider>
   );
-});
+};
