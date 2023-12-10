@@ -5,7 +5,7 @@ import { useState, useMemo, useCallback, useContext } from 'react';
 import * as CollectionsApi from '../../api'
 import AsyncData from '../AsyncData';
 import { set } from 'react-hook-form';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
 
@@ -54,14 +54,10 @@ export default function CollectionList() {
     return String(c.id).includes(search);
   }), [search, collections]);
 
-  //create new collection
-  const createCollection = useCallback((id, userId) => {
-    const newCollections = [{id, userId}, ...collections];
-  }, [collections]);
-
   const setCollectionToUpdate = useCallback((id) => {
     setCurrentCollection(id === null ? {} : collections.find((t) => t.id === id));
   }, [collections]);
+  
 
   return (
     <>

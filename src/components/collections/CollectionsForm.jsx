@@ -101,17 +101,15 @@ export default function CollectionForm({currentCollection, setCollectionToUpdate
 
         <div className='clearfix'>
           <div className='btn-group float-end'>
-            <button type='submit' className='btn btn-primary'>
-              Add Collection
-            </button>
-          </div>
-        </div>
-
-        <button type='submit' className='btn btn-primary' disabled={isSubmitting}>
+          <button type='submit' className='btn btn-primary' disabled={isSubmitting}>
           {currentCollection?.id
           ? "Save collection"
           : "Add collection"}
         </button>
+          </div>
+        </div>
+
+        
 
       </form>
     </FormProvider>

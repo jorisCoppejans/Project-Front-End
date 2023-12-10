@@ -1,5 +1,11 @@
 import { COINS_DATA } from '../../assets/data/mock_data';
 import { useForm } from 'react-hook-form';
+import useSWRMutation from 'swr/mutation';
+import { save } from '../../api';
+import Error from '../Error';
+import { useCallback } from 'react';
+import { useEffect } from 'react';
+
 
 //validationrules for the form
 const validationRules = {
@@ -33,35 +39,37 @@ const isNameUnique = (name) => {
 };
 
 
-export default function CoinForm({ onSaveCoin }) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+export default function CoinForm({ currentCoin, setCoinToUpdate }) {
+  const { register, handleSubmit, reset, setvalue, formState: { errors } } = useForm();
+  const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
 
   //other methodes
-  const onSubmit = (data) => {
-    console.log(JSON.stringify(data));
-    const { id, name, value, collectionId, favorite } = data;
-    onSaveCoin(id, name, value, collectionId, favorite);
-    reset();
-  };
+  const onSubmit = useCallback(async (data) => {
+    const { name, value, collectionId, favorite } = data;
+    await saveCoin({id: currentCoin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
+    setCoinToUpdate(null)
+  }, [reset, saveCoin]);
+
+  useEffect(() => {
+    if (
+      // check on non-empty object
+      currentCoin &&
+      (Object.keys(currentCoin).length !== 0 ||
+          currentCoin.constructor !== Object)
+    ) {
+      setvalue("name", currentCoin.name);
+      setvalue("collectionId", currentCoin.collectionId);
+      setvalue("value", currentCoin.value);
+      setvalue("favorite", currentCoin.favorite);
+    } else {
+      reset();
+    }
+  }, [currentCoin, setvalue, reset]);
 
   return (
     <>
       <h2>Add coin</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
-      <div className="mb-3">
-          <label htmlFor="id" className="form-label">Id</label>
-          <input
-            {...register('id', validationRules.id)}
-            defaultValue=''
-            id="id"
-            type="text"
-            className="form-control"
-            placeholder="id"
-            required
-          />
-          {errors.id && <p className="form-text text-danger">{errors.id.message}</p> }
-        </div>
-        
+      <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>        
         <div className="mb-3">
           <label htmlFor="Name" className="form-label">Name</label>
           <input
@@ -76,14 +84,14 @@ export default function CoinForm({ onSaveCoin }) {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="Value" className="form-label">Value</label>
+          <label htmlFor="value" className="form-label">value</label>
           <input
-            {...register('Value')}
+            {...register('value')}
             defaultValue=''
-            id="Value"
+            id="value"
             type="text"
             className="form-control"
-            placeholder="Value"
+            placeholder="value"
             required
           />
         </div>
