@@ -4,16 +4,29 @@ import '../../index.css';
 import { IoTrashOutline, IoPencil } from 'react-icons/io5';
 import useSWR, { mutate } from 'swr';
 import { getAll } from '../../api';
+import CoinList from '../coins/CoinList';
 
 
-export default memo(function Collection( {id, userId, value, onDelete, onEdit}) {
+export default memo(function Collection( {id, userId, onDelete, onEdit}) {
   //constants
   const {data: coins = []} = useSWR('coins', getAll);
   
   const handleFavoriteCoin = (id, favorite) => {
     const newCoin = coins.map((c) => (c.id === id ? { ...c, favorite } : c));
     mutate('coins', newCoin, false);
+  };  
+  
+  const calculateSum = (coins, id) => {
+    const filteredCoins = coins.filter((c) => c.collectionId === id);
+    
+    const sum = filteredCoins.reduce((accumulator, coin) => {
+      return accumulator + coin.value;
+    }, 0);
+  
+    return sum;
   };
+
+  const value = calculateSum(coins, id);
 
   const handleDelete = useCallback(() => {
     onDelete(id);
@@ -45,6 +58,7 @@ export default memo(function Collection( {id, userId, value, onDelete, onEdit}) 
     <th>Favorite</th>
     <th></th>
   </tr>
+  
     {coins.filter((c) => c.collectionId === id).map((c) => (
       <Coin key = {c.id} {...c} onFavo={handleFavoriteCoin} onDelete = {onDelete} onEdit = {onEdit}/>
     ))}

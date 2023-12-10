@@ -20,17 +20,13 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
     onFavo(id, newfavorite);
   };
 
-  const handleDelete = useCallback(() => {
-    onDelete(id);
-  }, [id, onDelete]);
+  const handleDeleteCoin = useCallback(() => {
+    deleteCoin(id);
+  }, [id, onFavo, onDelete, deleteCoin]);
 
-  const handleEdit = useCallback(() => {
+  const handleEditCoin = useCallback(() => {
     onEdit(id);
   }, [id, onEdit]);
-
-  // const setCoinToUpdate = useCallback((id) => {
-  //   setCurrentCoin(id === null ? {} : coins.find((t) => t.id === id));
-  // }, [coins]);
 
   return (
       <tr className={`bg-${theme} border-${oppositeTheme} indentedText`}>
@@ -39,10 +35,10 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
       <td>{value}</td>
       <td><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
       <td>
-      <button type="button" className="btn btn-light" onClick={handleEdit}>
+      <button type="button" className="btn btn-light" onClick={handleEditCoin}>
         <IoPencil />
       </button>
-      <button className='btn btn-primary' onClick={handleDelete}>
+      <button className='btn btn-primary' onClick={handleDeleteCoin}>
         <IoTrashOutline />
       </button>
       </td>

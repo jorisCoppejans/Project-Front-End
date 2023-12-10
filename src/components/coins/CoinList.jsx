@@ -7,14 +7,16 @@ import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
 
 
-
 export default function CoinList() {
   const {data: coins = [], isLoading, error} = useSWR('coins', getAll);
   const [currentCoin, setCurrentCoin] = useState({});
+  const { trigger: deleteCoin, error: deleteError } = useSWRMutation('coins', deleteById);
+
 
   const setCoinToUpdate = useCallback((id) => {
     setCurrentCoin(id === null ? {} : coins.find((t) => t.id === id));
   }, [coins]);
+
 
 
   return (

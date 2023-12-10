@@ -1,6 +1,5 @@
 import CollectionList from './components/collections/CollectionList'
 import CoinList from './components/coins/CoinList'
-import CoinForm from './components/coins/CoinForm';
 import { useTheme, themes } from './contexts/Theme.context';
 import { IoMoonSharp, IoSunny } from 'react-icons/io5';
 
