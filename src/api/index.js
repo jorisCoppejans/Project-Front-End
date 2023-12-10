@@ -19,10 +19,6 @@ export const save = async (url, { arg: body }) => {
   });
 };
 
-export const updateById = async (url, { arg: body }) => {
-  const { id, ...values } = body;
-  await axios.put(`${baseUrl}/${url}/${id}`, values);
-};
 
 export const deleteById = async (url, { arg: id }) => {
   await axios.delete(`${baseUrl}/${url}/${id}`);

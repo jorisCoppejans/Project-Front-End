@@ -2,10 +2,8 @@ import Collection from './Collection';
 import CollectionsForm from './CollectionsForm';
 import { ThemeContext } from '../../contexts/Theme.context';
 import { useState, useMemo, useCallback, useContext } from 'react';
-import * as CollectionsApi from '../../api'
 import AsyncData from '../AsyncData';
-import { set } from 'react-hook-form';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
 
@@ -43,7 +41,7 @@ function CollectionTable({collections, onDelete, onEdit}) {
 
 
 export default function CollectionList() {
-  const [text, setText] = useState('');
+  const [text, Text] = useState('');
   const [search, setSearch] = useState('');
   const {data: collections = [], isLoading, error} = useSWR('collections', getAll);
   const { trigger: deleteCollection, error: deleteError } = useSWRMutation('collections', deleteById);

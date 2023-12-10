@@ -61,9 +61,13 @@ export default function CollectionForm({currentCollection, setCollectionToUpdate
 
   const onSubmit = useCallback(async (data) => {
     const { userId } = data
-    await saveCollection({id: currentCollection?.id, userId: userId, value: 0});
-    setCollectionToUpdate(null)
-  }, [reset, saveCollection]);
+    try{
+      await saveCollection({id: currentCollection?.id, userId: userId, value: 0});
+      setCollectionToUpdate(null);}
+    catch(error){
+      console.log(error)
+    }
+  }, [reset, saveCollection, currentCollection, setCollectionToUpdate]);
 
   useEffect(() => {
     if (
