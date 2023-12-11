@@ -40,7 +40,7 @@ const isNameUnique = (name) => {
 
 
 export default function CoinForm({ currentCoin, setCoinToUpdate }) {
-  const { register, handleSubmit, reset, setvalue, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
   const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
 
   //other methodes
@@ -48,7 +48,7 @@ export default function CoinForm({ currentCoin, setCoinToUpdate }) {
     const { name, value, collectionId, favorite } = data;
     await saveCoin({id: currentCoin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
     setCoinToUpdate(null)
-  }, [reset, saveCoin]);
+  }, [reset, saveCoin, currentCoin, setCoinToUpdate]);
 
   useEffect(() => {
     if (
@@ -57,14 +57,14 @@ export default function CoinForm({ currentCoin, setCoinToUpdate }) {
       (Object.keys(currentCoin).length !== 0 ||
           currentCoin.constructor !== Object)
     ) {
-      setvalue("name", currentCoin.name);
-      setvalue("collectionId", currentCoin.collectionId);
-      setvalue("value", currentCoin.value);
-      setvalue("favorite", currentCoin.favorite);
+      setValue("name", currentCoin.name);
+      setValue("collectionId", currentCoin.collectionId);
+      setValue("value", currentCoin.value);
+      setValue("favorite", currentCoin.favorite);
     } else {
       reset();
     }
-  }, [currentCoin, setvalue, reset]);
+  }, [currentCoin, setValue, reset]);
 
   return (
     <>

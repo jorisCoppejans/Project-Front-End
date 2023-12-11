@@ -58,10 +58,10 @@ export default memo(function Collection( {id, userId, onDelete, onEdit}) {
     <th>Favorite</th>
     <th></th>
   </tr>
-  
-    {coins.filter((c) => c.collectionId === id).map((c) => (
+  <CoinList></CoinList>
+    {/* {coins.filter((c) => c.collectionId === id).map((c) => (
       <Coin key = {c.id} {...c} onFavo={handleFavoriteCoin} onDelete = {onDelete} onEdit = {onEdit}/>
-    ))}
+    ))} */}
   </>
   );
 });
