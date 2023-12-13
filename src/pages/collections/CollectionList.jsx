@@ -1,8 +1,8 @@
-import Collection from './Collection';
-import CollectionsForm from './CollectionsForm';
+import Collection from '../../components/collections/Collection';
+import CollectionsForm from '../../components/collections/CollectionsForm';
 import { ThemeContext } from '../../contexts/Theme.context';
 import { useState, useMemo, useCallback, useContext } from 'react';
-import AsyncData from '../AsyncData';
+import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
@@ -60,9 +60,6 @@ export default function CollectionList() {
   return (
     <>
       <h1>Collections</h1>
-      <CollectionsForm setCollectionToUpdate = {setCollectionToUpdate} currentCollection = {currentCollection}/>
-
-      
       {/*filterButton*/}
       <div className="input-group mb-3 w-50">
         <input

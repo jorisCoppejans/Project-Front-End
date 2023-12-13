@@ -10,6 +10,14 @@ export async function getAll(url) {
   return data.items;
 }
 
+export async function getById(url) {
+  const {
+    data,
+  } = await axios.get(`${baseUrl}/${url}`);
+
+  return data;
+}
+
 export const save = async (url, { arg: body }) => {
   const { id, ...values } = body;
   await axios({

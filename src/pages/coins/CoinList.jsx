@@ -1,12 +1,11 @@
-import { COINS_DATA } from '../../assets/data/mock_data';
 import { useState, useMemo, useCallback, useContext } from 'react';
 import { ThemeContext } from '../../contexts/Theme.context';
-import CoinForm from './CoinForm';
-import Coin from './Coin';
+import CoinForm from '../../components/coins/CoinForm';
+import Coin from '../../components/coins/Coin';
 import useSWR, { mutate } from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
-import AsyncData from '../AsyncData';
+import AsyncData from '../../components/AsyncData';
 
 
 

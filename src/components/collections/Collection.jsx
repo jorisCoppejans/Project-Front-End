@@ -4,7 +4,7 @@ import '../../index.css';
 import { IoTrashOutline, IoPencil } from 'react-icons/io5';
 import useSWR, { mutate } from 'swr';
 import { getAll } from '../../api';
-import CoinList from '../coins/CoinList';
+import CoinList from '../../pages/coins/CoinList';
 
 
 export default memo(function Collection( {id, userId, onDelete, onEdit}) {

@@ -1,5 +1,5 @@
-import CollectionList from './components/collections/CollectionList'
-import CoinList from './components/coins/CoinList'
+import CollectionList from './pages/collections/CollectionList'
+import CoinList from './pages/coins/CoinList'
 import { useTheme, themes } from './contexts/Theme.context';
 import { IoMoonSharp, IoSunny } from 'react-icons/io5';
 
