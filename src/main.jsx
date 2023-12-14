@@ -10,19 +10,36 @@ import AddOrEditCollection from './pages/collections/AddOrEditCollection.jsx';
 import AddOrEditCoin from './pages/coins/AddOrEditCoin.jsx';
 import CoinForm from './components/coins/CoinForm.jsx';
 import CollectionForm from './components/collections/CollectionsForm.jsx';
+import { AuthProvider } from './contexts/Auth.context';
+import Login from './pages/Login.jsx';
+import PrivateRoute from './components/PrivateRoute';
+import Logout from './pages/Logout';
+
+
+
 
 const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
       {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/logout',
+        element: <Logout />,
+      },
+      {
         path: '/',
+        element: <PrivateRoute />,
         children: [
           {index: true, element: <CollectionList />}
         ],
       },
       {
         path: '/collections',
+        element: <PrivateRoute />,
         children: [
           {index: true, element: <CollectionForm />},
           {path: 'add', element: <AddOrEditCollection />},
@@ -33,6 +50,7 @@ const router = createBrowserRouter([
       
       {
         path: '/coins',
+        element: <PrivateRoute />,
         children: [
           {index: true, element: <CoinForm />},
           {path: 'add', element: <AddOrEditCoin />},
@@ -48,8 +66,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </React.StrictMode>,
-)
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
+  </React.StrictMode>
+);
