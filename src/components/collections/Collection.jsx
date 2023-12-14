@@ -38,27 +38,27 @@ export default memo(function Collection( {id, userId, onDelete, onEdit}) {
 
   return (
   <>
-  <tr>
-    <td>{id}</td>
-    <td>{userId}</td>
-    <td>€ {value}</td>
+  <tr data-cy="collection">
+    <td data-cy="collectionId">{id}</td>
+    <td data-cy="collectionUser">{userId}</td>
+    <td data-cy="collectionValue">€ {value}</td>
     <td>
-      <button type="button" className="btn btn-light" onClick={handleEdit}>
+      <button type="button" className="btn btn-light" onClick={handleEdit} data-cy="collectionEditButton">
         <IoPencil />
       </button>
-      <button className='btn btn-primary' onClick={handleDelete}>
+      <button className='btn btn-primary' onClick={handleDelete} data-cy="collectionRemoveButton">
         <IoTrashOutline />
       </button>
     </td>
   </tr>
   <tr className="indentedText">
-    <th>Name</th>
-    <th>Id</th>
-    <th>Value</th>
-    <th>Favorite</th>
+    <th data-cy="collectionCoinName">Name</th>
+    <th data-cy="collectionCoinId">Id</th>
+    <th data-cy="collectionCoinValue">Value</th>
+    <th data-cy="collectionCoinFavorite">Favorite</th>
     <th></th>
   </tr>
-  <CoinList></CoinList>
+  <CoinList data-cy="collectionCoins"></CoinList>
     {/* {coins.filter((c) => c.collectionId === id).map((c) => (
       <Coin key = {c.id} {...c} onFavo={handleFavoriteCoin} onDelete = {onDelete} onEdit = {onEdit}/>
     ))} */}

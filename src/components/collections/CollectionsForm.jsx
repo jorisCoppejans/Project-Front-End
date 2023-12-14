@@ -90,7 +90,7 @@ export default function CollectionForm({currentCollection, setCollectionToUpdate
       <h2>Add collection</h2>
       <Error error={saveError} />
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
-        <div className="mb-3">
+        <div className="mb-3" data-cy= "userIdInput">
           <label htmlFor="userId" className="form-label">userId</label>
           <input
             {...register('userId')}
@@ -103,7 +103,7 @@ export default function CollectionForm({currentCollection, setCollectionToUpdate
           />
         </div>
 
-        <div className='clearfix'>
+        <div className='clearfix' data-cy= "submitButton">
           <div className='btn-group float-end'>
           <button type='submit' className='btn btn-primary' disabled={isSubmitting}>
           {currentCollection?.id

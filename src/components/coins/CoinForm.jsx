@@ -123,7 +123,7 @@ export default function CoinForm({ currentCoin, setCoinToUpdate }) {
 
         <div className='clearfix'>
           <div className='btn-group float-end'>
-            <button type='submit' className='btn btn-primary'>
+            <button type='submit' className='btn btn-primary'  data-cy="Add coin">
               Add Coin
             </button>
           </div>
