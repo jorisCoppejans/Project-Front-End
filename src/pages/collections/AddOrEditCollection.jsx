@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
-import { getById, getAll } from "../../api";
+import { getById } from "../../api";
 import CollectionForm from '../../components/collections/CollectionsForm';
 import AsyncData from '../../components/AsyncData';
 
 export default function AddOrEditCollection() {
   const { id } = useParams();
+
 
   const {
     data: collection,
@@ -13,11 +14,6 @@ export default function AddOrEditCollection() {
     isLoading: collectionLoading,
   } = useSWR(id ? `collections/${id}` : null, getById);
 
-  const {
-    data: coins = [],
-    error: coinsError,
-    isLoading: coinsLoading,
-  } = useSWR('coins', getAll);
 
   return (
     <>
@@ -25,8 +21,8 @@ export default function AddOrEditCollection() {
         Add a collection
       </h1>
 
-      <AsyncData error={collectionError || coinsError} loading={collectionLoading || coinsLoading}>
-        <CollectionForm coins={coins} collection={collection}/>
+      <AsyncData error={collectionError} loading={collectionLoading}>
+        <CollectionForm collection = {collection}/>
       </AsyncData>
     </>
   );

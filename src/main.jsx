@@ -14,8 +14,7 @@ import { AuthProvider } from './contexts/Auth.context';
 import Login from './pages/Login.jsx';
 import PrivateRoute from './components/PrivateRoute';
 import Logout from './pages/Logout';
-
-
+import Register from './pages/Register';
 
 
 const router = createBrowserRouter([
@@ -29,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: '/logout',
         element: <Logout />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
       },
       {
         path: '/',

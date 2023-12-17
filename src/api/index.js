@@ -1,26 +1,34 @@
-import axiosRootRoot from 'axios';
+import axiosRoot from 'axios';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
-export async function getAll(url) {
+export const axios = axiosRoot.create({
+  baseURL: baseUrl,
+});
+
+export const setAuthToken = (token) => {
+  if (token) {
+    axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers['Authorization'];
+  }
+};
+
+export const getAll = async (url) => {
   const {
-    data,
-  } = await axiosRoot.get(`${baseUrl}/${url}`);
+    data
+  } = await axios.get(`${baseUrl}/${url}`); 
 
   return data.items;
-}
+};
 
-export async function getById(url) {
-  const {
-    data,
-  } = await axiosRoot.get(`${baseUrl}/${url}`);
-
-  return data;
-}
+export const deleteById = async (url, { arg: id }) => {
+  await axios.delete(`${baseUrl}/${url}/${id}`);
+};
 
 export const save = async (url, { arg: body }) => {
   const { id, ...values } = body;
-  await axiosRoot({
+  await axios({
     method: id ? 'PUT' : 'POST',
     url: `${baseUrl}/${url}/${id ?? ''}`,
     data: values,
@@ -30,25 +38,15 @@ export const save = async (url, { arg: body }) => {
 export const post = async (url, { arg }) => {
   const {
     data,
-  } = await axiosRoot.post(url, arg);
+  } = await axiosRoot.post(`${baseUrl}/${url}`, arg);
 
   return data;
 };
 
-export const axiosRoot = axiosRootRoot.create({
-  baseURL: baseUrl,
-});
+export const getById = async (url) => {
+  const {
+    data,
+  } = await axios.get(`${baseUrl}/${url}`);
 
-export const setAuthToken = (token) => {
-  if (token) {
-    axiosRoot.defaults.headers['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete axiosRoot.defaults.headers['Authorization'];
-  }
-};
-
-
-
-export const deleteById = async (url, { arg: id }) => {
-  await axiosRoot.delete(`${baseUrl}/${url}/${id}`);
+  return data;
 };

@@ -5,6 +5,7 @@ import useSWRMutation from 'swr/mutation';
 import { save } from '../../api';
 import Error from '../Error';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 //validationRules
 const validationRules = {
@@ -55,34 +56,32 @@ function LabelInput({ label, name, type, ...rest }) {
   );
 }
 
-export default function CollectionForm({currentCollection, setCollectionToUpdate}) {
+export default function CollectionForm({collection}) {
   const { register, handleSubmit, reset, setValue, formState: { errors }, isSubmitting } = useForm();
   const {trigger: saveCollection, error: saveError} = useSWRMutation('collections', save); 
+  const navigate = useNavigate();
 
   const onSubmit = useCallback(async (data) => {
     const { userId } = data
     try{
-      await saveCollection({id: currentCollection?.id, userId: userId, value: 0});
-      setCollectionToUpdate(null);}
-    catch(error){
+      await saveCollection({id: collection?.id, userId: userId, value: 0});
+    }catch(error){
       console.log(error)
     }
-  }, [reset, saveCollection, currentCollection, setCollectionToUpdate]);
+    navigate('/');
+  }, [reset, saveCollection, navigate]);
 
   useEffect(() => {
     if (
-      // check on non-empty object
-      currentCollection &&
-      (Object.keys(currentCollection).length !== 0 ||
-          currentCollection.constructor !== Object)
+      collection &&
+      (Object.keys(collection).length !== 0 ||
+          collection.constructor !== Object)
     ) {
-      setValue("id", currentCollection.id);
-      setValue("userId", currentCollection.userId);
-      setValue("value", currentCollection.value);
+      setValue("userId", collection.userId);
     } else {
       reset();
     }
-  }, [currentCollection, setValue, reset]);
+  }, [collection, setValue, reset]);
   
 
   return (
@@ -90,7 +89,7 @@ export default function CollectionForm({currentCollection, setCollectionToUpdate
       <h2>Add collection</h2>
       <Error error={saveError} />
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
-        <div className="mb-3" data-cy= "userIdInput">
+        {/* <div className="mb-3" data-cy= "userIdInput">
           <label htmlFor="userId" className="form-label">userId</label>
           <input
             {...register('userId')}
@@ -101,20 +100,15 @@ export default function CollectionForm({currentCollection, setCollectionToUpdate
             placeholder="userId"
             required
           />
-        </div>
+        </div> */}
 
         <div className='clearfix' data-cy= "submitButton">
           <div className='btn-group float-end'>
-          <button type='submit' className='btn btn-primary' disabled={isSubmitting}>
-          {currentCollection?.id
-          ? "Save collection"
-          : "Add collection"}
-        </button>
+            <button type='submit' className='btn btn-primary' disabled={isSubmitting}>
+            Add collection
+            </button>
           </div>
         </div>
-
-        
-
       </form>
     </FormProvider>
   );

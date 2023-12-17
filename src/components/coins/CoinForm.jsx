@@ -25,6 +25,7 @@ const validationRules = {
   }
 };
 
+
 //methodes for unique values
 const isIdUnique = (id) => {
   const collections = COINS_DATA;
@@ -43,11 +44,12 @@ export default function CoinForm({ currentCoin, setCoinToUpdate }) {
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
   const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
 
+
   //other methodes
   const onSubmit = useCallback(async (data) => {
     const { name, value, collectionId, favorite } = data;
     await saveCoin({id: currentCoin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
-    setCoinToUpdate(null)
+
   }, [reset, saveCoin, currentCoin, setCoinToUpdate]);
 
   useEffect(() => {
@@ -121,11 +123,22 @@ export default function CoinForm({ currentCoin, setCoinToUpdate }) {
           />
         </div>
 
-        <div className='clearfix'>
-          <div className='btn-group float-end'>
-            <button type='submit' className='btn btn-primary'  data-cy="Add coin">
-              Add Coin
-            </button>
+        <div className="clearfix">
+          <div className="btn-group float-end">
+            {currentCoin ? (
+              <button
+                type="button"
+                className="btn btn-warning"
+                onClick={handleEditButtonClick} // Trigger the edit button click
+                data-cy="Edit Coin"
+              >
+                Edit Coin
+              </button>
+            ) : (
+              <button type="submit" className="btn btn-primary" data-cy="Add Coin">
+                Add Coin
+              </button>
+            )}
           </div>
         </div>
       </form>

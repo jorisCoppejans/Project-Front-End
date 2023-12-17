@@ -1,10 +1,9 @@
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate, useLocation } from 'react-router-dom';
-import LabelInput from '../components/LabelINput';
+import LabelInput from '../components/LabelInput';
 import { useAuth } from '../contexts/Auth.context';
 import Error from '../components/Error';
-import { useCallback, useMemo } from 'react';
-
 
 const validationRules = {
   email: {
@@ -16,18 +15,8 @@ const validationRules = {
 };
 
 export default function Login() {
-
   const { error, loading, login } = useAuth();
   const navigate = useNavigate();
-  const { search } = useLocation();
-
-
-  const redirect = useMemo(() => {
-    const urlParams = new URLSearchParams(search);
-    if (urlParams.has("redirect"))
-      return urlParams.get("redirect");
-    return "/";
-  }, [search]);
 
   const methods = useForm({
     defaultValues: {
@@ -37,24 +26,21 @@ export default function Login() {
   });
   const { handleSubmit, reset } = methods;
 
-
   const handleCancel = useCallback(() => {
     reset();
   }, [reset]);
 
-
   const handleLogin = useCallback(
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
-
+      console.log(loggedIn);
       if (loggedIn) {
-        navigate({
-          pathname: redirect,
+        navigate('/',{
           replace: true,
         });
       }
     },
-    [login, navigate, redirect],
+    [login, navigate]
   );
 
   return (
@@ -62,7 +48,8 @@ export default function Login() {
       <div className='container'>
         <form
           className='d-flex flex-column'
-          onSubmit={handleSubmit(handleLogin)}>
+          onSubmit={handleSubmit(handleLogin)}
+        >
           <h1>Sign in</h1>
 
           <Error error={error} />
@@ -72,6 +59,7 @@ export default function Login() {
             type='text'
             name='email'
             placeholder='your@email.com'
+            data-cy='email_input'
             validationRules={validationRules.email}
           />
 
@@ -79,6 +67,7 @@ export default function Login() {
             label='password'
             type='password'
             name='password'
+            data-cy='password_input'
             validationRules={validationRules.password}
           />
 
@@ -86,15 +75,18 @@ export default function Login() {
             <div className='btn-group float-end'>
               <button
                 type='submit'
+                data-cy='submit_btn'
                 className='btn btn-primary'
-                disabled={loading}>
+                disabled={loading}
+              >
                 Sign in
               </button>
 
               <button
                 type='button'
                 className='btn btn-light'
-                onClick={handleCancel}>
+                onClick={handleCancel}
+              >
                 Cancel
               </button>
             </div>

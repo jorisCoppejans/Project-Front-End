@@ -6,6 +6,8 @@ import AsyncData from '../../components/AsyncData';
 
 export default function AddOrEditCoin() {
   const { id } = useParams();
+  const [currentCoin, setCurrentCoin] = useState({});
+
 
   const {
     data: collection,
@@ -19,6 +21,10 @@ export default function AddOrEditCoin() {
     isLoading: coinsLoading,
   } = useSWR('coins', getAll);
 
+  const setCoinToUpdate = useCallback((id) => {
+    setCurrentCoin(id === null ? {} : coins.find((t) => t.id === id));
+  }, [coins]);
+
   return (
     <>
       <h1>
@@ -26,7 +32,7 @@ export default function AddOrEditCoin() {
       </h1>
 
       <AsyncData error={collectionError || coinsError} loading={collectionLoading || coinsLoading}>
-        <CoinForm coins={coins} collection={collection}/>
+        <CoinForm setCoinToUpdate={setCoinToUpdate} currentCoin={currentCoin} />
       </AsyncData>
     </>
   );

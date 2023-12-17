@@ -6,6 +6,7 @@ import { memo, useCallback } from 'react';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { getAll, deleteById } from '../../api';
+import { useNavigate } from "react-router";
 
 
 
@@ -13,6 +14,7 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
   // themes
   const { theme, oppositeTheme } = useThemeColors();
   const { trigger: deleteCoin, error: deleteError } = useSWRMutation('coins', deleteById);
+  const navigate = useNavigate()
 
 
   //methodes
@@ -25,6 +27,7 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
   }, [id, onFavo, onDelete, deleteCoin]);
 
   const handleEditCoin = useCallback(() => {
+    navigate('/coins/')
     onEdit(id);
   }, [id, onEdit]);
 

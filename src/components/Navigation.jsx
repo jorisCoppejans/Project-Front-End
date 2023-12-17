@@ -16,24 +16,32 @@ export default function Navbar() {
         </ul>
         
         <ul className="nav-item my-2 mx-sm-3 my-sm-0">
-          <li><Link className="nav-link" to="/collections">Collections</Link></li>
+          <li><Link className="nav-link" to="/collections">Add a collection</Link></li>
         </ul>
         
         <ul className="nav-item my-2 mx-sm-3 my-sm-0">
-          <li><Link className="nav-link" to="/coins">Coins</Link></li>
+          <li><Link className="nav-link" to="/coins">Add a coin</Link></li>
         </ul>
 
         <div className="flex-grow-1"></div>
 
-        {isAuthed? (
-            <div className="nav-item my-2 mx-sm-3 my-sm-0">
-              <Link className="nav-link" to="/logout">Logout</Link>
-            </div>
-          ): (
-            <div className="nav-item my-2 mx-sm-3 my-sm-0">
-              <Link className="nav-link" to="/login">Login</Link>
-            </div>
-          )
+        {
+          isAuthed
+            ? (
+              <div className="nav-item my-2 mx-sm-3 my-sm-0">
+                <Link className="nav-link" to="/logout">Logout</Link>
+              </div>
+            )
+            : (
+              <>         
+                <div className="nav-item my-2 mx-sm-3 my-sm-0">
+                  <Link className="nav-link" to="/login">Login</Link>
+                </div>
+                <div className="nav-item my-2 mx-sm-3 my-sm-0">
+                  <Link className="nav-link" to="/register">Register</Link>
+                </div>
+              </>
+            )
         }
 
         <button className="btn btn-secondary" type="button" onClick={toggleTheme}>

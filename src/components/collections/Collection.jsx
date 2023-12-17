@@ -4,12 +4,13 @@ import '../../index.css';
 import { IoTrashOutline, IoPencil } from 'react-icons/io5';
 import useSWR, { mutate } from 'swr';
 import { getAll } from '../../api';
-import CoinList from '../../pages/coins/CoinList';
+import { Link } from 'react-router-dom';
 
 
-export default memo(function Collection( {id, userId, onDelete, onEdit}) {
+export default memo(function Collection( {id, userId, onDelete}) {
   //constants
   const {data: coins = []} = useSWR('coins', getAll);
+
   
   const handleFavoriteCoin = (id, favorite) => {
     const newCoin = coins.map((c) => (c.id === id ? { ...c, favorite } : c));
@@ -32,10 +33,6 @@ export default memo(function Collection( {id, userId, onDelete, onEdit}) {
     onDelete(id);
   }, [id, onDelete]);
 
-  const handleEdit = useCallback(() => {
-    onEdit(id);
-  }, [id, onEdit]);
-
   return (
   <>
   <tr data-cy="collection">
@@ -43,9 +40,9 @@ export default memo(function Collection( {id, userId, onDelete, onEdit}) {
     <td data-cy="collectionUser">{userId}</td>
     <td data-cy="collectionValue">€ {value}</td>
     <td>
-      <button type="button" className="btn btn-light" onClick={handleEdit} data-cy="collectionEditButton">
+      {/* <Link type="button" className="btn btn-light" to={`/collections/edit/${id}`} data-cy="collectionEditButton">
         <IoPencil />
-      </button>
+      </Link> */}
       <button className='btn btn-primary' onClick={handleDelete} data-cy="collectionRemoveButton">
         <IoTrashOutline />
       </button>
@@ -58,10 +55,9 @@ export default memo(function Collection( {id, userId, onDelete, onEdit}) {
     <th data-cy="collectionCoinFavorite">Favorite</th>
     <th></th>
   </tr>
-  <CoinList data-cy="collectionCoins"></CoinList>
-    {/* {coins.filter((c) => c.collectionId === id).map((c) => (
-      <Coin key = {c.id} {...c} onFavo={handleFavoriteCoin} onDelete = {onDelete} onEdit = {onEdit}/>
-    ))} */}
+    {coins.filter((c) => c.collectionId === id).map((c) => (
+      <Coin key = {c.id} {...c} onFavo={handleFavoriteCoin} onDelete = {onDelete}/>
+    ))}
   </>
   );
 });

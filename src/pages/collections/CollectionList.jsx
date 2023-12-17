@@ -1,20 +1,17 @@
 import Collection from '../../components/collections/Collection';
-import CollectionsForm from '../../components/collections/CollectionsForm';
 import { ThemeContext } from '../../contexts/Theme.context';
-import { useState, useMemo, useCallback, useContext } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
 
 
-function CollectionTable({collections, onDelete, onEdit}) {
+function CollectionTable({collections, onDelete}) {
   const { theme } = useContext(ThemeContext);
   if (collections.length === 0) {
     return (
-      <div className="alert alert-info">
-        There are no collections yet.
-      </div>
+      <div className="alert alert-info">There are no collections yet.</div>
     );
   }
 
@@ -31,7 +28,7 @@ function CollectionTable({collections, onDelete, onEdit}) {
         </thead>
         <tbody>
           {collections.sort().map((collection) => (
-            <Collection key={collection.id} onDelete = {onDelete} onEdit = {onEdit} {...collection} />
+            <Collection key={collection.id} onDelete = {onDelete} {...collection} />
           ))}
         </tbody>
       </table>
@@ -41,7 +38,7 @@ function CollectionTable({collections, onDelete, onEdit}) {
 
 
 export default function CollectionList() {
-  const [text, Text] = useState('');
+  const [text] = useState('');
   const [search, setSearch] = useState('');
   const {data: collections = [], isLoading, error} = useSWR('collections', getAll);
   const { trigger: deleteCollection, error: deleteError } = useSWRMutation('collections', deleteById);
@@ -51,10 +48,6 @@ export default function CollectionList() {
   const filteredCollections = useMemo(() => collections.filter((c) => {
     return String(c.id).includes(search);
   }), [search, collections]);
-
-  const setCollectionToUpdate = useCallback((id) => {
-    setCurrentCollection(id === null ? {} : collections.find((t) => t.id === id));
-  }, [collections]);
   
 
   return (
@@ -76,10 +69,7 @@ export default function CollectionList() {
       </div>
       <div className="mt-4">
       <AsyncData loading={isLoading} error={error || deleteError}>
-        {!error ? <CollectionTable 
-        collections={filteredCollections} 
-        onDelete={deleteCollection} 
-        onEdit = {setCollectionToUpdate}/> : null}
+        <CollectionTable collections={filteredCollections} onDelete={deleteCollection}/>
       </AsyncData>
       </div>
     </>
