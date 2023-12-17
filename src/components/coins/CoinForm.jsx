@@ -5,6 +5,7 @@ import { save } from '../../api';
 import Error from '../Error';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 
 //validationrules for the form
@@ -40,33 +41,37 @@ const isNameUnique = (name) => {
 };
 
 
-export default function CoinForm({ currentCoin, setCoinToUpdate }) {
+export default function CoinForm({coin}) {
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
   const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
+  const navigate = useNavigate();
 
 
   //other methodes
   const onSubmit = useCallback(async (data) => {
     const { name, value, collectionId, favorite } = data;
-    await saveCoin({id: currentCoin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
-
-  }, [reset, saveCoin, currentCoin, setCoinToUpdate]);
+    try{
+      await saveCoin({id: coin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
+    }catch(error){
+      console.log(error);
+    }
+  }, [reset, saveCoin, navigate]);
 
   useEffect(() => {
     if (
       // check on non-empty object
-      currentCoin &&
-      (Object.keys(currentCoin).length !== 0 ||
-          currentCoin.constructor !== Object)
+      coin &&
+      (Object.keys(coin).length !== 0 ||
+          coin.constructor !== Object)
     ) {
-      setValue("name", currentCoin.name);
-      setValue("collectionId", currentCoin.collectionId);
-      setValue("value", currentCoin.value);
-      setValue("favorite", currentCoin.favorite);
+      setValue("name", coin.name);
+      setValue("collectionId", coin.collectionId);
+      setValue("value", coin.value);
+      setValue("favorite", coin.favorite);
     } else {
       reset();
     }
-  }, [currentCoin, setValue, reset]);
+  }, [coin, setValue, reset]);
 
   return (
     <>
@@ -125,11 +130,10 @@ export default function CoinForm({ currentCoin, setCoinToUpdate }) {
 
         <div className="clearfix">
           <div className="btn-group float-end">
-            {currentCoin ? (
+            {coin ? (
               <button
                 type="button"
-                className="btn btn-warning"
-                onClick={handleEditButtonClick} // Trigger the edit button click
+                className="btn btn-primary"
                 data-cy="Edit Coin"
               >
                 Edit Coin

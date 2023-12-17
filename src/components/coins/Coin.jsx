@@ -6,7 +6,7 @@ import { memo, useCallback } from 'react';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { getAll, deleteById } from '../../api';
-import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 
 
@@ -14,8 +14,6 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
   // themes
   const { theme, oppositeTheme } = useThemeColors();
   const { trigger: deleteCoin, error: deleteError } = useSWRMutation('coins', deleteById);
-  const navigate = useNavigate()
-
 
   //methodes
   const handleFavoriteCoin = (newfavorite) => {
@@ -26,10 +24,6 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
     deleteCoin(id);
   }, [id, onFavo, onDelete, deleteCoin]);
 
-  const handleEditCoin = useCallback(() => {
-    navigate('/coins/')
-    onEdit(id);
-  }, [id, onEdit]);
 
   return (
       <tr className={`bg-${theme} border-${oppositeTheme} indentedText`}>
@@ -38,9 +32,9 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
       <td>{value}</td>
       <td><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
       <td>
-      <button type="button" className="btn btn-light" onClick={handleEditCoin}>
+      <Link type="button" className="btn btn-light" to={`/coins/edit/${id}`}>
         <IoPencil />
-      </button>
+      </Link>
       <button className='btn btn-primary' onClick={handleDeleteCoin}>
         <IoTrashOutline />
       </button>

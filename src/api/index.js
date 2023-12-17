@@ -37,7 +37,7 @@ export const save = async (url, { arg: body }) => {
 
 export const post = async (url, { arg }) => {
   const {
-    data,
+    data
   } = await axiosRoot.post(`${baseUrl}/${url}`, arg);
 
   return data;

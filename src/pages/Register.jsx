@@ -23,8 +23,7 @@ export default function Register() {
       const loggedIn = await register({ firstname, lastname, email, password });
 
       if (loggedIn) {
-        navigate({
-          pathname: '/',
+        navigate('/login',{
           replace: true,
         });
       }

@@ -43,15 +43,18 @@ export const AuthProvider = ({ children }) => {
     (token, user) => {
       setToken(token);
       setUser(user);
-
+  
       localStorage.setItem(JWT_TOKEN_KEY, token);
-      localStorage.setItem(USER_ID_KEY, user.id);
+  
+      if (user && user.id) {
+        localStorage.setItem(USER_ID_KEY, user.id);
+      }
     },
     [],
   );
+  
 
-  const login = useCallback(
-    async (email, password) => {
+  const login = useCallback(async (email, password) => {
       try {
         const { token, user } = await doLogin({
           email,
@@ -69,20 +72,22 @@ export const AuthProvider = ({ children }) => {
     [doLogin, setSession]
   );
 
-  const register = useCallback(
-    async (data) => {
-      try {
-        const { token, user } = await doRegister(data);
-        console.log(token, user);
-        setSession(token, user);
-        return true;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
-    },
-    [doRegister, setSession]
-  );
+const register = useCallback(async (data) => {
+  try {
+    const response = await doRegister(data);
+
+    const { token, user } = response;
+    if (token && user && user.id) {
+      setSession(token, user);
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+}, [doRegister, setSession]);
+
 
   const logout = useCallback(() => {
     setToken(null);

@@ -35,9 +35,7 @@ export default function Login() {
       const loggedIn = await login(email, password);
       console.log(loggedIn);
       if (loggedIn) {
-        navigate('/',{
-          replace: true,
-        });
+        navigate('/');
       }
     },
     [login, navigate]
