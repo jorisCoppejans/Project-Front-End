@@ -42,7 +42,7 @@ const isNameUnique = (name) => {
 
 
 export default function CoinForm({coin}) {
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, setValue, isSubmitting, formState: { errors } } = useForm();
   const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
   const navigate = useNavigate();
 
@@ -52,6 +52,7 @@ export default function CoinForm({coin}) {
     const { name, value, collectionId, favorite } = data;
     try{
       await saveCoin({id: coin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
+      navigate('/')
     }catch(error){
       console.log(error);
     }
@@ -59,7 +60,6 @@ export default function CoinForm({coin}) {
 
   useEffect(() => {
     if (
-      // check on non-empty object
       coin &&
       (Object.keys(coin).length !== 0 ||
           coin.constructor !== Object)
@@ -68,6 +68,7 @@ export default function CoinForm({coin}) {
       setValue("collectionId", coin.collectionId);
       setValue("value", coin.value);
       setValue("favorite", coin.favorite);
+      
     } else {
       reset();
     }
@@ -128,23 +129,20 @@ export default function CoinForm({coin}) {
           />
         </div>
 
-        <div className="clearfix">
-          <div className="btn-group float-end">
-            {coin ? (
+          <div className='clearfix'>
+            <div className='btn-group float-end'>
               <button
-                type="button"
-                className="btn btn-primary"
-                data-cy="Edit Coin"
+                type='submit'
+                className='btn btn-primary'
+                disabled={isSubmitting}
+                data-cy="submit_coin"
               >
-                Edit Coin
+                {coin?.id
+                  ? "Save coin"
+                  : "Add coin"}
               </button>
-            ) : (
-              <button type="submit" className="btn btn-primary" data-cy="Add Coin">
-                Add Coin
-              </button>
-            )}
+            </div>
           </div>
-        </div>
       </form>
     </>
   )

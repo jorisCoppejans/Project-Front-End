@@ -11,7 +11,7 @@ export default function AddOrEditCoin() {
     data: coin,
     error: coinsError,
     isLoading: coinsLoading,
-  } = useSWR('coins', getAll);
+  } = useSWR(id ? `coins/${id}`: null, getById);
 
   return (
     <>
