@@ -15,10 +15,6 @@ export default function AddOrEditCoin() {
 
   return (
     <>
-      <h1>
-        Add a collection
-      </h1>
-
       <AsyncData error={coinsError} loading={coinsLoading}>
         <CoinForm coin = {coin} />
       </AsyncData>

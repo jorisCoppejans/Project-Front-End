@@ -22,6 +22,7 @@ let USER_DATA = [
 let COLLECTIONS_DATA = [
   {
     id : '001',
+    name: 'voorbeeld',
     userId : '001',
     value : 100000
   },

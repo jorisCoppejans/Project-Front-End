@@ -20,8 +20,8 @@ function CollectionTable({collections, onDelete}) {
       <table className={`table table-hover table-responsive table-${theme}`}>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>UserId</th>
+            {/* <th></th> */}
+            {/* <th>UserId</th> */}
             <th>Total value</th>
             <th></th>
           </tr>

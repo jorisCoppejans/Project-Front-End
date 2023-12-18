@@ -78,6 +78,7 @@ export default function CollectionForm({collection}) {
           collection.constructor !== Object)
     ) {
       setValue("userId", collection.userId);
+      navigate('/')
     } else {
       reset();
     }

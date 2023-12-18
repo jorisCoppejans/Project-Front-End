@@ -37,7 +37,7 @@ export default memo(function Collection( {id, userId, onDelete}) {
   <>
   <tr data-cy="collection">
     <td data-cy="collectionId">{id}</td>
-    <td data-cy="collectionUser">{userId}</td>
+    {/* <td data-cy="collectionUser">{userId}</td> */}
     <td data-cy="collectionValue">€ {value}</td>
     <td>
       {/* <Link type="button" className="btn btn-light" to={`/collections/edit/${id}`} data-cy="collectionEditButton">
@@ -50,9 +50,9 @@ export default memo(function Collection( {id, userId, onDelete}) {
   </tr>
   <tr className="indentedText">
     <th data-cy="collectionCoinName">Name</th>
-    <th data-cy="collectionCoinId">Id</th>
+    {/* <th data-cy="collectionCoinId">Id</th> */}
     <th data-cy="collectionCoinValue">Value</th>
-    <th data-cy="collectionCoinFavorite">Favorite</th>
+    {/* <th data-cy="collectionCoinFavorite">Favorite</th> */}
     <th></th>
   </tr>
     {coins.filter((c) => c.collectionId === id).map((c) => (

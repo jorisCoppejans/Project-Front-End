@@ -76,7 +76,9 @@ export default function CoinForm({coin}) {
 
   return (
     <>
-      <h2>Add coin</h2>
+      <h1>{coin?.id
+            ? "Save coin"
+            : "Add coin"}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>        
         <div className="mb-3">
           <label htmlFor="Name" className="form-label">Name</label>

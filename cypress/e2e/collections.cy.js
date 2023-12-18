@@ -1,3 +1,7 @@
+beforeEach(() => {
+  cy.login('joris.coppejans@yahoo.com', '12345678');
+});
+
 describe("Collections list", () => {
   it("should show the collections", () => {
     cy.intercept(

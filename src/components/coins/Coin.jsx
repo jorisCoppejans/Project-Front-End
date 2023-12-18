@@ -28,8 +28,8 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
   return (
       <tr className={`bg-${theme} border-${oppositeTheme} indentedText`}>
       <td>{name}</td>
-      <td>{id}</td>
-      <td>{value}</td>
+      {/* <td>{id}</td> */}
+      <td>€{value}</td>
       <td><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
       <td>
       <Link type="button" className="btn btn-light" to={`/coins/edit/${id}`}>
