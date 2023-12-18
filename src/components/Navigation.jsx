@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/Auth.context';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const { isAuthed } = useAuth();
+  const { isAuthed, userFirstname, userLastname } = useAuth();
 
   return (
     <nav className={`navbar sticky-top bg-${theme} text-bg-${theme} mb-4`}>
@@ -27,8 +27,9 @@ export default function Navbar() {
 
         {
           isAuthed
-            ? (
+            ? (              
               <div className="nav-item my-2 mx-sm-3 my-sm-0">
+                <h3>{`${userFirstname} ${userLastname}`}</h3>
                 <Link data-cy='logout_btn' className="nav-link" to="/logout">Logout</Link>
               </div>
             )

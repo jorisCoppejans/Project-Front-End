@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import LabelInput from '../components/LabelInput';
@@ -15,7 +15,7 @@ const validationRules = {
 };
 
 export default function Login() {
-  const { error, loading, login } = useAuth();
+  const { error, loading, login, isAuthed } = useAuth();
   const navigate = useNavigate();
 
   const methods = useForm({
@@ -24,6 +24,13 @@ export default function Login() {
       password: '12345678',
     },
   });
+
+  useEffect(() => {
+    if (isAuthed) {
+      navigate('/');
+    }
+  }, [isAuthed, navigate]);
+
   const { handleSubmit, reset } = methods;
 
   const handleCancel = useCallback(() => {
@@ -34,9 +41,11 @@ export default function Login() {
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
       console.log(loggedIn);
-      if (loggedIn) {
-        navigate('/');
-      }
+      // if (loggedIn) {
+      //   console.log("Successfully logged in!");
+
+      //   navigate('/');
+      // }
     },
     [login, navigate]
   );

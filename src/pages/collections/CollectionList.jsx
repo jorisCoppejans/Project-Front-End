@@ -21,7 +21,7 @@ function CollectionTable({collections, onDelete}) {
       <table className={`table table-hover table-responsive table-${theme}`}>
         <thead>
           <tr>
-            {/* <th></th> */}
+            <th>Id</th>
             {/* <th>UserId</th> */}
             <th>Total value</th>
             <th></th>
@@ -39,7 +39,7 @@ function CollectionTable({collections, onDelete}) {
 
 
 export default function CollectionList() {
-  const [text] = useState('');
+  const [text, setText] = useState('');
   const [search, setSearch] = useState('');
   const {data: collections = [], isLoading, error} = useSWR('collections', getAll);
   const { trigger: deleteCollection, error: deleteError } = useSWRMutation('collections', deleteById);

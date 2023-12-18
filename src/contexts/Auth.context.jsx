@@ -1,17 +1,12 @@
-import {
-  createContext,
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-  useContext,
-} from 'react';
+import {createContext,useState,useCallback,useEffect,useMemo,useContext} from 'react';
 import useSWRMutation from 'swr/mutation';
 import * as api from '../api';
 
 const JWT_TOKEN_KEY = 'jwtToken';
 const USER_ID_KEY = 'userId';
 const AuthContext = createContext();
+let userFirstname
+let userLastname
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -48,6 +43,9 @@ export const AuthProvider = ({ children }) => {
   
       if (user && user.id) {
         localStorage.setItem(USER_ID_KEY, user.id);
+
+        userFirstname = user.firstname
+        userLastname = user.lastname
       }
     },
     [],
@@ -108,8 +106,10 @@ const register = useCallback(async (data) => {
       login,
       logout,
       register,
+      userFirstname,
+      userLastname
     }),
-    [token, user, loginError, registerError, ready, loginLoading, registerLoading, isAuthed, login, logout, register]
+    [token, user, loginError, registerError, ready, loginLoading, registerLoading, isAuthed, login, logout, register, userFirstname, userLastname]
   );
 
   return (

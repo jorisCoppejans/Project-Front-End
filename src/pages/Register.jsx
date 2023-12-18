@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import LabelInput from '../components/LabelInput';
@@ -8,7 +8,7 @@ import { useThemeColors } from '../contexts/Theme.context';
 
 export default function Register() {
   const { theme, oppositeTheme } = useThemeColors();
-  const { error, loading, register } = useAuth();
+  const { error, loading, register, isAuthed } = useAuth();
   const navigate = useNavigate();
 
   const methods = useForm();
@@ -20,16 +20,19 @@ export default function Register() {
 
   const handleRegister = useCallback(
     async ({ firstname, lastname, email, password }) => {
-      const loggedIn = await register({ firstname, lastname, email, password });
-
-      if (loggedIn) {
-        navigate('/login',{
-          replace: true,
-        });
+      try {
+        await register({ firstname, lastname, email, password });
+        // De registratie is voltooid, nu kun je navigeren
+        navigate('/login');
+      } catch (error) {
+        console.error("Error during registration:", error);
+        // Behandel de fout hier indien nodig
       }
     },
     [register, navigate]
   );
+  
+
 
   const validationRules = useMemo(() => ({
     firstname: {
