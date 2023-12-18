@@ -6,6 +6,7 @@ import Error from '../Error';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useThemeColors } from '../../contexts/Theme.context';
 
 
 //validationrules for the form
@@ -45,6 +46,8 @@ export default function CoinForm({coin}) {
   const { register, handleSubmit, reset, setValue, isSubmitting, formState: { errors } } = useForm();
   const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
   const navigate = useNavigate();
+  const { theme, oppositeTheme } = useThemeColors();
+
 
 
   //other methodes
@@ -75,7 +78,7 @@ export default function CoinForm({coin}) {
   }, [coin, setValue, reset]);
 
   return (
-    <>
+    <div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
       <h1>{coin?.id
             ? "Save coin"
             : "Add coin"}</h1>
@@ -146,6 +149,6 @@ export default function CoinForm({coin}) {
             </div>
           </div>
       </form>
-    </>
+    </div>
   )
 };

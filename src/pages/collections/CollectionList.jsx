@@ -5,6 +5,7 @@ import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
+import { useThemeColors } from '../../contexts/Theme.context';
 
 
 function CollectionTable({collections, onDelete}) {
@@ -42,7 +43,8 @@ export default function CollectionList() {
   const [search, setSearch] = useState('');
   const {data: collections = [], isLoading, error} = useSWR('collections', getAll);
   const { trigger: deleteCollection, error: deleteError } = useSWRMutation('collections', deleteById);
-  const [currentCollection, setCurrentCollection] = useState({});
+  const { theme, oppositeTheme } = useThemeColors();
+
 
   //Filtering of collections
   const filteredCollections = useMemo(() => collections.filter((c) => {
@@ -51,7 +53,7 @@ export default function CollectionList() {
   
 
   return (
-    <>
+    <div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
       <h1>Collections</h1>
       {/*filterButton*/}
       <div className="input-group mb-3 w-50">
@@ -72,6 +74,6 @@ export default function CollectionList() {
         <CollectionTable collections={filteredCollections} onDelete={deleteCollection}/>
       </AsyncData>
       </div>
-    </>
+    </div>
   );
 }

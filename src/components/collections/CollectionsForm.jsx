@@ -6,6 +6,7 @@ import { save } from '../../api';
 import Error from '../Error';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useThemeColors } from '../../contexts/Theme.context';
 
 //validationRules
 const validationRules = {
@@ -60,6 +61,9 @@ export default function CollectionForm({collection}) {
   const { register, handleSubmit, reset, setValue, formState: { errors }, isSubmitting } = useForm();
   const {trigger: saveCollection, error: saveError} = useSWRMutation('collections', save); 
   const navigate = useNavigate();
+  const { theme, oppositeTheme } = useThemeColors();
+
+  
 
   const onSubmit = useCallback(async (data) => {
     const { userId } = data
@@ -87,7 +91,7 @@ export default function CollectionForm({collection}) {
 
   return (
     <FormProvider handleSubmit={handleSubmit} errors={errors} register={register} isSubmitting={isSubmitting}>
-      <h2>Add collection</h2>
+      <h2 className={`container-xl bg-${theme} text-${oppositeTheme}`}>Add collection</h2>
       <Error error={saveError} />
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
         {/* <div className="mb-3" data-cy= "userIdInput">
