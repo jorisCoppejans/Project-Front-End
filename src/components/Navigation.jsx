@@ -46,11 +46,7 @@ export default function Navbar() {
         }
 
         <button className="btn btn-secondary" type="button" onClick={toggleTheme}>
-          {
-            theme==='dark'
-              ? <IoMoonSharp />
-              : <IoSunny />
-          }
+          {theme==='dark' ? <IoMoonSharp /> : <IoSunny />}
         </button>
       </div>
     </nav>

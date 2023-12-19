@@ -3,19 +3,16 @@ import { useThemeColors } from '../../contexts/Theme.context';
 import '../../index.css'
 import { IoTrashOutline, IoPencil } from 'react-icons/io5';
 import { memo, useCallback } from 'react';
-import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { getAll, deleteById } from '../../api';
+import { deleteById } from '../../api';
 import { Link } from "react-router-dom";
 
 
 
 export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, onEdit}) {
-  // themes
   const { theme, oppositeTheme } = useThemeColors();
-  const { trigger: deleteCoin, error: deleteError } = useSWRMutation('coins', deleteById);
+  const { trigger: deleteCoin } = useSWRMutation('coins', deleteById);
 
-  //methodes
   const handleFavoriteCoin = (newfavorite) => {
     onFavo(id, newfavorite);
   };
@@ -28,7 +25,6 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete, 
   return (
       <tr className={`bg-${theme} border-${oppositeTheme} indentedText`}>
       <td>{name}</td>
-      {/* <td>{id}</td> */}
       <td>€{value}</td>
       <td><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
       <td>

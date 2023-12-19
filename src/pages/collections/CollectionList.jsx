@@ -1,11 +1,10 @@
 import Collection from '../../components/collections/Collection';
-import { ThemeContext } from '../../contexts/Theme.context';
+import { ThemeContext, useThemeColors } from '../../contexts/Theme.context';
 import { useState, useMemo, useContext } from 'react';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
-import { useThemeColors } from '../../contexts/Theme.context';
 
 
 function CollectionTable({collections, onDelete}) {
@@ -22,15 +21,12 @@ function CollectionTable({collections, onDelete}) {
         <thead>
           <tr>
             <th>Id</th>
-            {/* <th>UserId</th> */}
             <th>Total value</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {collections.sort().map((collection) => (
-            <Collection key={collection.id} onDelete = {onDelete} {...collection} />
-          ))}
+          {collections.sort().map((collection) => (<Collection key={collection.id} onDelete = {onDelete} {...collection} />))}
         </tbody>
       </table>
     </div>
@@ -46,7 +42,6 @@ export default function CollectionList() {
   const { theme, oppositeTheme } = useThemeColors();
 
 
-  //Filtering of collections
   const filteredCollections = useMemo(() => collections.filter((c) => {
     return String(c.id).includes(search);
   }), [search, collections]);
@@ -55,7 +50,6 @@ export default function CollectionList() {
   return (
     <div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
       <h1>Collections</h1>
-      {/*filterButton*/}
       <div className="input-group mb-3 w-50">
         <input
           type="search"

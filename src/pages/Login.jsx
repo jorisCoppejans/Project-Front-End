@@ -41,11 +41,6 @@ export default function Login() {
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
       console.log(loggedIn);
-      // if (loggedIn) {
-      //   console.log("Successfully logged in!");
-
-      //   navigate('/');
-      // }
     },
     [login, navigate]
   );

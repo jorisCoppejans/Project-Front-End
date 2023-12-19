@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
-import { getById, getAll } from "../../api";
+import { getById } from "../../api";
 import CoinForm from '../../components/coins/CoinForm';
 import AsyncData from '../../components/AsyncData';
 

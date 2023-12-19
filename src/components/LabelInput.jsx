@@ -1,8 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 
-export default function LabelInput({
-  label, name, type, validationRules, ...rest
-}) {
+export default function LabelInput({label, name, type, validationRules, ...rest}) {
   const {
     register,
     formState: {
@@ -28,7 +26,7 @@ export default function LabelInput({
       />
       {error ? (
         <div className="form-text text-danger" data-cy="label_input_error">
-          {error.message} {/* Render only the error message */}
+          {error.message}
         </div>
       ) : null}
     </div>

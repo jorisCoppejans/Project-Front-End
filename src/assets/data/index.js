@@ -15,7 +15,6 @@ const DATABASE_PASSWORD = config.get('database.password');
 
 let knexInstance;
 
-//verbinden met database en kijken of connectie werkt
 const initializeData = async() => {
   const knexOptions = {
     client: DATABASE_CLIENT,

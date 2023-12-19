@@ -1,14 +1,12 @@
-import { memo, useCallback } from 'react';
+import {  useCallback, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { COLLECTIONS_DATA } from '../../assets/data/mock_data';
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api';
 import Error from '../Error';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useThemeColors } from '../../contexts/Theme.context';
 
-//validationRules
 const validationRules = {
   id: {
     required: "id is required",

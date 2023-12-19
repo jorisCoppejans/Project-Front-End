@@ -1,14 +1,12 @@
 import Coin from '../coins/Coin';
 import { memo, useCallback } from 'react';
 import '../../index.css';
-import { IoTrashOutline, IoPencil } from 'react-icons/io5';
+import { IoTrashOutline } from 'react-icons/io5';
 import useSWR, { mutate } from 'swr';
 import { getAll } from '../../api';
-import { Link } from 'react-router-dom';
 
 
 export default memo(function Collection( {id, userId, onDelete}) {
-  //constants
   const {data: coins = []} = useSWR('coins', getAll);
 
   
@@ -37,12 +35,8 @@ export default memo(function Collection( {id, userId, onDelete}) {
   <>
   <tr data-cy="collection">
     <td data-cy="collectionId">{id}</td>
-    {/* <td data-cy="collectionUser">{userId}</td> */}
     <td data-cy="collectionValue">€ {value}</td>
     <td>
-      {/* <Link type="button" className="btn btn-light" to={`/collections/edit/${id}`} data-cy="collectionEditButton">
-        <IoPencil />
-      </Link> */}
       <button className='btn btn-primary' onClick={handleDelete} data-cy="collectionRemoveButton">
         <IoTrashOutline />
       </button>
@@ -50,9 +44,7 @@ export default memo(function Collection( {id, userId, onDelete}) {
   </tr>
   <tr className="indentedText">
     <th data-cy="collectionCoinName">Name</th>
-    {/* <th data-cy="collectionCoinId">Id</th> */}
     <th data-cy="collectionCoinValue">Value</th>
-    {/* <th data-cy="collectionCoinFavorite">Favorite</th> */}
     <th></th>
   </tr>
     {coins.filter((c) => c.collectionId === id).map((c) => (

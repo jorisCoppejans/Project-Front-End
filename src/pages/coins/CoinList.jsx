@@ -13,7 +13,7 @@ export default function CoinList() {
   const {data: coins = [], isLoading, error} = useSWR('coins', getAll);
   const [currentCoin, setCurrentCoin] = useState({});
   const { trigger: deleteCoin, error: deleteError } = useSWRMutation('coins', deleteById);
-  const [search, setSearch] = useState('');
+  const [search] = useState('');
 
   const filteredCoins = useMemo(() => coins.filter((c) => {
     return String(c.id).includes(search);
@@ -44,11 +44,7 @@ export default function CoinList() {
 }
 
 
-function CoinTable({
-  coins,
-  onEdit,
-  onDelete
-}) {
+function CoinTable({coins, onEdit, onDelete}) {
   const { theme } = useContext(ThemeContext);
 
   if (coins.length === 0) {
@@ -72,14 +68,7 @@ function CoinTable({
           </tr>
         </thead>
         <tbody>
-        {coins.map((coin) => (
-            <Coin
-              {...coin}
-              key={coin.id}
-              onDelete={onDelete}
-              onEdit={onEdit}
-            />
-          ))}
+        {coins.map((coin) => (<Coin {...coin} key={coin.id} onDelete={onDelete} onEdit={onEdit}/>))}
         </tbody>
       </table>
     </div>

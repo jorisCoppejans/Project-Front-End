@@ -1,9 +1,7 @@
-import { COINS_DATA } from '../../assets/data/mock_data';
 import { useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import { getAll, save } from '../../api';
-import { useCallback } from 'react';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useThemeColors } from '../../contexts/Theme.context';
 import useSWR from 'swr';
@@ -12,13 +10,12 @@ import useSWR from 'swr';
 
 export default function CoinForm({coin}) {
   const { register, handleSubmit, reset, setValue, isSubmitting, formState: { errors } } = useForm();
-  const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
+  const {trigger: saveCoin} = useSWRMutation('coins', save); 
   const navigate = useNavigate();
   const { theme, oppositeTheme } = useThemeColors();
-  const {data: coins = [], isLoading, error} = useSWR('coins', getAll);
+  const {data: coins = []} = useSWR('coins', getAll);
   
   
-  //methodes for unique values
   const isIdUnique = (id) => {
     const ids = coins.map((c) => c.id);
     return !ids.includes(id);
@@ -33,45 +30,32 @@ export default function CoinForm({coin}) {
     return value >= 0;
   };
   
-  const doesCollectionExist = (value) => {
-  
-  }
-  
 
-  //validationrules for the form
-const validationRules = {
-  id: {
-    required: "id is required",
-    validate: (value) => {
-      const isUnique = isIdUnique(value);
-      return isUnique || 'This id has already been used';
+  const validationRules = {
+    id: {
+      required: "id is required",
+      validate: (value) => {
+        const isUnique = isIdUnique(value);
+        return isUnique || 'This id has already been used';
+      }
+    },
+    name: {
+      required: "name is required",
+      validate: (value) => {
+        const isUnique = isNameUnique(value);
+        return isUnique || 'This name has already been used';
+      }
+    },
+    value: {
+      required: "value is required",
+      validate: (value) => {
+        const isPositive = isValuePositive(value);
+        return isPositive || "the value can't be negative";
+      }
     }
-  },
-  name: {
-    required: "name is required",
-    validate: (value) => {
-      const isUnique = isNameUnique(value);
-      return isUnique || 'This name has already been used';
-    }
-  },
-  value: {
-    required: "value is required",
-    validate: (value) => {
-      const isPositive = isValuePositive(value);
-      return isPositive || "the value can't be negative";
-    }
-  },
-  // collectionId: {
-  //   required: "the id of the collection is required",
-  //   validate: (collectionId) => {
-  //     const hasCollection = doesCollectionExist(collectionId);
-  //     return hasCollection || `there is no collection with id ${collectionId}.`;
-  //   }
-  // }
-};
+  };
 
 
-  //other methodes
   const onSubmit = useCallback(async (data) => {
     data.value = Number(String(data.value).replace(",", "."));
     const { name, value, collectionId, favorite } = data;
@@ -101,9 +85,7 @@ const validationRules = {
 
   return (
     <div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
-      <h1>{coin?.id
-            ? "Save coin"
-            : "Add coin"}</h1>
+      <h1>{coin?.id ? "Save coin" : "Add coin"}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>        
         <div className="mb-3">
           <label htmlFor="Name" className="form-label">Name</label>
@@ -117,7 +99,6 @@ const validationRules = {
             required
           />
           {errors.name && <p className="error-message">{errors.name.message}</p>}
-
         </div>
 
         <div className="mb-3">
@@ -132,7 +113,6 @@ const validationRules = {
             required
           />
           {errors.value && <p className="error-message">{errors.value.message}</p>}
-
         </div>
 
         <div className="mb-3">
@@ -168,9 +148,7 @@ const validationRules = {
                 disabled={isSubmitting}
                 data-cy="submit_coin"
               >
-                {coin?.id
-                  ? "Save coin"
-                  : "Add coin"}
+                {coin?.id ? "Save coin" : "Add coin"}
               </button>
             </div>
           </div>
