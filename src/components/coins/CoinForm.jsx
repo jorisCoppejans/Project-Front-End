@@ -2,7 +2,6 @@ import { COINS_DATA } from '../../assets/data/mock_data';
 import { useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api';
-import Error from '../Error';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
@@ -52,6 +51,7 @@ export default function CoinForm({coin}) {
 
   //other methodes
   const onSubmit = useCallback(async (data) => {
+    data.value = Number(String(data.value).replace(",", "."));
     const { name, value, collectionId, favorite } = data;
     try{
       await saveCoin({id: coin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
