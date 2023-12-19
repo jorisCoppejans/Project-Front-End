@@ -11,7 +11,7 @@ export default function LabelInput({
     },
   } = useFormContext();
 
-  const hasError = name in errors;
+  const error = errors[name];
 
   return (
     <div className="mb-3">
@@ -26,9 +26,9 @@ export default function LabelInput({
         className="form-control"
         {...rest}
       />
-      {hasError ? (
+      {error ? (
         <div className="form-text text-danger" data-cy="label_input_error">
-          {errors[name]}
+          {error.message} {/* Render only the error message */}
         </div>
       ) : null}
     </div>

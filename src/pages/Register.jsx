@@ -34,7 +34,7 @@ export default function Register() {
   
 
 
-  const validationRules = useMemo(() => ({
+  const validationRules = {
     firstname: {
       required: 'Firstname is required',
     },
@@ -54,7 +54,8 @@ export default function Register() {
         return password === value || 'Passwords do not match';
       },
     },
-  }), []);
+  };
+  
 
   return (
     <FormProvider {...methods}>
@@ -64,8 +65,6 @@ export default function Register() {
           onSubmit={handleSubmit(handleRegister)}
         >
           <h1>Register</h1>
-
-          <Error error={error} />
 
           <LabelInput
             label='Firstname'

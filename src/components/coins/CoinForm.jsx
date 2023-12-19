@@ -1,14 +1,44 @@
 import { COINS_DATA } from '../../assets/data/mock_data';
 import { useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
-import { save } from '../../api';
+import { getAll, save } from '../../api';
 import { useCallback } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useThemeColors } from '../../contexts/Theme.context';
+import useSWR from 'swr';
 
 
-//validationrules for the form
+
+export default function CoinForm({coin}) {
+  const { register, handleSubmit, reset, setValue, isSubmitting, formState: { errors } } = useForm();
+  const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
+  const navigate = useNavigate();
+  const { theme, oppositeTheme } = useThemeColors();
+  const {data: coins = [], isLoading, error} = useSWR('coins', getAll);
+  
+  
+  //methodes for unique values
+  const isIdUnique = (id) => {
+    const ids = coins.map((c) => c.id);
+    return !ids.includes(id);
+  };
+  
+  const isNameUnique = (name) => {
+    const names = coins.map((c) => c.name);
+    return !names.includes(name);
+  };
+  
+  const isValuePositive = (value) => {
+    return value >= 0;
+  };
+  
+  const doesCollectionExist = (value) => {
+  
+  }
+  
+
+  //validationrules for the form
 const validationRules = {
   id: {
     required: "id is required",
@@ -23,30 +53,22 @@ const validationRules = {
       const isUnique = isNameUnique(value);
       return isUnique || 'This name has already been used';
     }
-  }
+  },
+  value: {
+    required: "value is required",
+    validate: (value) => {
+      const isPositive = isValuePositive(value);
+      return isPositive || "the value can't be negative";
+    }
+  },
+  // collectionId: {
+  //   required: "the id of the collection is required",
+  //   validate: (collectionId) => {
+  //     const hasCollection = doesCollectionExist(collectionId);
+  //     return hasCollection || `there is no collection with id ${collectionId}.`;
+  //   }
+  // }
 };
-
-
-//methodes for unique values
-const isIdUnique = (id) => {
-  const collections = COINS_DATA;
-  const ids = collections.map((c) => c.id);
-  return !ids.includes(id);
-};
-
-const isNameUnique = (name) => {
-  const collections = COINS_DATA;
-  const names = collections.map((c) => c.name);
-  return !names.includes(name);
-};
-
-
-export default function CoinForm({coin}) {
-  const { register, handleSubmit, reset, setValue, isSubmitting, formState: { errors } } = useForm();
-  const {trigger: saveCoin, error: saveError} = useSWRMutation('coins', save); 
-  const navigate = useNavigate();
-  const { theme, oppositeTheme } = useThemeColors();
-
 
 
   //other methodes
@@ -94,12 +116,14 @@ export default function CoinForm({coin}) {
             placeholder="Name"
             required
           />
+          {errors.name && <p className="error-message">{errors.name.message}</p>}
+
         </div>
 
         <div className="mb-3">
           <label htmlFor="value" className="form-label">value</label>
           <input
-            {...register('value')}
+            {...register('value', validationRules.value)}
             defaultValue=''
             id="value"
             type="text"
@@ -107,12 +131,14 @@ export default function CoinForm({coin}) {
             placeholder="value"
             required
           />
+          {errors.value && <p className="error-message">{errors.value.message}</p>}
+
         </div>
 
         <div className="mb-3">
           <label htmlFor="collectionId" className="form-label">collectionId</label>
           <input
-            {...register('collectionId')}
+            {...register('collectionId', validationRules.collectionId)}
             defaultValue=''
             id="collectionId"
             type="text"
