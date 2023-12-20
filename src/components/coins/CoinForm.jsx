@@ -60,7 +60,7 @@ export default function CoinForm({coin}) {
     data.value = Number(String(data.value).replace(",", "."));
     const { name, value, collectionId, favorite } = data;
     try{
-      await saveCoin({id: coin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
+      await saveCoin({id: String(coin?.id), name: name, value: value, collectionId: collectionId, favorite: favorite});
       navigate('/')
     }catch(error){
       console.log(error);
@@ -68,11 +68,10 @@ export default function CoinForm({coin}) {
   }, [reset, saveCoin, navigate]);
 
   useEffect(() => {
-    if (
-      coin &&
-      (Object.keys(coin).length !== 0 ||
-          coin.constructor !== Object)
-    ) {
+    console.log("coin:", coin);
+
+    if (coin && coin.id !== undefined)
+      {
       setValue("name", coin.name);
       setValue("collectionId", coin.collectionId);
       setValue("value", coin.value);
@@ -85,21 +84,21 @@ export default function CoinForm({coin}) {
 
   return (
     <div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
-      <h1>{coin?.id ? "Save coin" : "Add coin"}</h1>
+      <h1>{coin ? "Save coin" : "Add coin"}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>        
-        <div className="mb-3">
-          <label htmlFor="Name" className="form-label">Name</label>
-          <input
-            {...register('name', validationRules.name)}
-            defaultValue=''
-            id="Name"
-            type="text"
-            className="form-control"
-            placeholder="Name"
-            required
-          />
-          {errors.name && <p className="error-message">{errors.name.message}</p>}
-        </div>
+      <div className="mb-3">
+        <label htmlFor="Name" className="form-label">Name</label>
+        <input
+          {...register('name', coin ? {} : validationRules.name)}
+          defaultValue=''
+          id="Name"
+          type="text"
+          className="form-control"
+          placeholder="Name"
+          required
+        />
+        {errors.name && <p className="error-message">{errors.name.message}</p>}
+      </div>
 
         <div className="mb-3">
           <label htmlFor="value" className="form-label">value</label>
@@ -148,7 +147,7 @@ export default function CoinForm({coin}) {
                 disabled={isSubmitting}
                 data-cy="submit_coin"
               >
-                {coin?.id ? "Save coin" : "Add coin"}
+                {coin ? "Save coin" : "Add coin"}
               </button>
             </div>
           </div>
