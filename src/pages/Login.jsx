@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import LabelInput from '../components/LabelInput';
 import { useAuth } from '../contexts/Auth.context';
 import Error from '../components/Error';
+import { useThemeColors } from '../contexts/Theme.context';
 
 const validationRules = {
   email: {
@@ -17,6 +18,8 @@ const validationRules = {
 export default function Login() {
   const { error, loading, login, isAuthed } = useAuth();
   const navigate = useNavigate();
+  const { theme, oppositeTheme } = useThemeColors();
+
 
   const methods = useForm({
     defaultValues: {
@@ -47,7 +50,7 @@ export default function Login() {
 
   return (
     <FormProvider {...methods}>
-      <div className='container'>
+      <div className={`container bg-${theme} text-${oppositeTheme}`}>
         <form
           className='d-flex flex-column'
           onSubmit={handleSubmit(handleLogin)}

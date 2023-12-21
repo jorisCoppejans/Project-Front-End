@@ -60,7 +60,7 @@ export default function CoinForm({coin}) {
     data.value = Number(String(data.value).replace(",", "."));
     const { name, value, collectionId, favorite } = data;
     try{
-      await saveCoin({id: String(coin?.id), name: name, value: value, collectionId: collectionId, favorite: favorite});
+      await saveCoin({id: coin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
       navigate('/')
     }catch(error){
       console.log(error);
@@ -68,8 +68,6 @@ export default function CoinForm({coin}) {
   }, [reset, saveCoin, navigate]);
 
   useEffect(() => {
-    console.log("coin:", coin);
-
     if (coin && coin.id !== undefined)
       {
       setValue("name", coin.name);
