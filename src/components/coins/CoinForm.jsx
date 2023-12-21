@@ -14,7 +14,9 @@ export default function CoinForm({coin}) {
   const navigate = useNavigate();
   const { theme, oppositeTheme } = useThemeColors();
   const {data: coins = []} = useSWR('coins', getAll);
-  
+
+
+
   
   const isIdUnique = (id) => {
     const ids = coins.map((c) => c.id);
@@ -57,10 +59,10 @@ export default function CoinForm({coin}) {
 
 
   const onSubmit = useCallback(async (data) => {
-    data.value = Number(String(data.value).replace(",", "."));
-    const { name, value, collectionId, favorite } = data;
+
+    const { name, collectionId, favorite } = data;
     try{
-      await saveCoin({id: coin?.id, name: name, value: value, collectionId: collectionId, favorite: favorite});
+      await saveCoin({id: coin?.id, name: name, value: 0, collectionId: collectionId, favorite: favorite});
       navigate('/')
     }catch(error){
       console.log(error);
@@ -80,75 +82,57 @@ export default function CoinForm({coin}) {
     }
   }, [coin, setValue, reset]);
 
+
   return (
     <div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
       <h1>{coin ? "Save coin" : "Add coin"}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>        
       <div className="mb-3">
         <label htmlFor="Name" className="form-label">Name</label>
-        <input
-          {...register('name', coin ? {} : validationRules.name)}
-          defaultValue=''
-          id="Name"
-          type="text"
-          className="form-control"
-          placeholder="Name"
-          required
-        />
-        {errors.name && <p className="error-message">{errors.name.message}</p>}
+          <select {...register('name')} id="name">
+            <option value="ADP">ADP</option>
+            <option value="AGIX3L">AGIX3L</option>
+            <option value="AGLD5S">AGLD5S</option>
+          </select>
       </div>
 
-        <div className="mb-3">
-          <label htmlFor="value" className="form-label">value</label>
-          <input
-            {...register('value', validationRules.value)}
-            defaultValue=''
-            id="value"
-            type="text"
-            className="form-control"
-            placeholder="value"
-            required
-          />
-          {errors.value && <p className="error-message">{errors.value.message}</p>}
-        </div>
+      <div className="mb-3">
+        <label htmlFor="collectionId" className="form-label">collectionId</label>
+        <input
+          {...register('collectionId', validationRules.collectionId)}
+          defaultValue=''
+          id="collectionId"
+          type="text"
+          className="form-control"
+          placeholder="collectionId"
+          required
+        />
+      </div>
 
-        <div className="mb-3">
-          <label htmlFor="collectionId" className="form-label">collectionId</label>
-          <input
-            {...register('collectionId', validationRules.collectionId)}
-            defaultValue=''
-            id="collectionId"
-            type="text"
-            className="form-control"
-            placeholder="collectionId"
-            required
-          />
-        </div>
+      <div className="mb-3">
+        <label htmlFor="favorite" className="form-label">favorite</label>
+        <input
+          {...register('favorite')}
+          defaultValue=''
+          id='favorite'
+          type='checkbox'
+          className='form-check-input'
+          placeholder="favorite"
+        />
+      </div>
 
-        <div className="mb-3">
-          <label htmlFor="favorite" className="form-label">favorite</label>
-          <input
-            {...register('favorite')}
-            defaultValue=''
-            id='favorite'
-            type='checkbox'
-            className='form-check-input'
-            placeholder="favorite"
-          />
+      <div className='clearfix'>
+        <div className='btn-group float-end'>
+          <button
+            type='submit'
+            className='btn btn-primary'
+            disabled={isSubmitting}
+            data-cy="submit_coin"
+          >
+            {coin ? "Save coin" : "Add coin"}
+          </button>
         </div>
-
-          <div className='clearfix'>
-            <div className='btn-group float-end'>
-              <button
-                type='submit'
-                className='btn btn-primary'
-                disabled={isSubmitting}
-                data-cy="submit_coin"
-              >
-                {coin ? "Save coin" : "Add coin"}
-              </button>
-            </div>
-          </div>
+      </div>
       </form>
     </div>
   )

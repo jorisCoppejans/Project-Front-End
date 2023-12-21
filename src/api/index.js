@@ -18,7 +18,6 @@ export const getAll = async (url) => {
   const {
     data
   } = await axios.get(`${baseUrl}/${url}`); 
-
   return data.items;
 };
 
