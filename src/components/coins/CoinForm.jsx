@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 import { getAll, save } from '../../api';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useThemeColors } from '../../contexts/Theme.context';
 import useSWR from 'swr';
@@ -14,8 +14,12 @@ export default function CoinForm({coin}) {
   const navigate = useNavigate();
   const { theme, oppositeTheme } = useThemeColors();
   const {data: coins = []} = useSWR('coins', getAll);
+  const {data: apiCoins = []} = useSWR('apiCoins', getAll);
+  const [searchTerm, setSearchTerm] = useState('');
 
-
+  const filteredApiCoins = apiCoins.filter((coin) =>
+    coin.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   
   const isIdUnique = (id) => {
@@ -88,13 +92,28 @@ export default function CoinForm({coin}) {
       <h1>{coin ? "Save coin" : "Add coin"}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>        
       <div className="mb-3">
-        <label htmlFor="Name" className="form-label">Name</label>
-          <select {...register('name')} id="name">
-            <option value="ADP">ADP</option>
-            <option value="AGIX3L">AGIX3L</option>
-            <option value="AGLD5S">AGLD5S</option>
-          </select>
-      </div>
+          <label htmlFor="Name" className="form-label">
+            Name
+          </label>
+          <input
+          key="name"
+            type="text"
+            {...register('name')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Type to filter..."
+          />
+          <ul>
+            {filteredApiCoins.map((filteredCoin) => (
+              <li
+                key={filteredCoin.id}
+                onClick={() => setValue('name', filteredCoin.name)}
+              >
+                {filteredCoin.name}
+              </li>
+            ))}
+          </ul>
+        </div>
 
       <div className="mb-3">
         <label htmlFor="collectionId" className="form-label">collectionId</label>

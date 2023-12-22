@@ -19,7 +19,7 @@ export default memo(function Collection( {id, userId, onDelete}) {
     const filteredCoins = coins.filter((c) => c.collectionId === id);
     
     const sum = filteredCoins.reduce((accumulator, coin) => {
-      return accumulator + coin.value;
+      return accumulator + parseFloat(coin.value);
     }, 0);
   
     return sum;
