@@ -4,10 +4,13 @@ import '../../index.css';
 import { IoTrashOutline } from 'react-icons/io5';
 import useSWR, { mutate } from 'swr';
 import { getAll } from '../../api';
+import { useCurrency } from '../../contexts/Currency.context';
 
 
-export default memo(function Collection( {id, userId, onDelete}) {
+export default memo(function Collection( {id, onDelete}) {
   const {data: coins = []} = useSWR('coins', getAll);
+  const { Currency } = useCurrency();
+
 
   
   const handleFavoriteCoin = (id, favorite) => {
@@ -25,17 +28,31 @@ export default memo(function Collection( {id, userId, onDelete}) {
     return sum;
   };
 
-  const value = calculateSum(coins, id);
+  let value = calculateSum(coins, id);
 
   const handleDelete = useCallback(() => {
     onDelete(id);
   }, [id, onDelete]);
 
+  function handleValue(value){
+    if (Currency === "$"){
+      value *= 1.1; 
+    }
+    return value
+  }
+
+  function handleSign(){
+    if (Currency === "$"){
+      return "$"
+    }
+    return "€"
+  }
+
   return (
   <>
   <tr data-cy="collection">
     <td data-cy="collectionId">{id}</td>
-    <td data-cy="collectionValue">€ {value}</td>
+    <td data-cy="collectionValue">{handleSign()}{value = handleValue(value)}</td>
     <td>
       <button className='btn btn-primary' onClick={handleDelete} data-cy="collectionRemoveButton">
         <IoTrashOutline />

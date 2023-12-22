@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { ThemeProvider } from './contexts/Theme.context.jsx';
+import { CurrencyContext, CurrencyProvider } from './contexts/Currency.context.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import CollectionList from './pages/collections/CollectionList.jsx';
 import Layout from './components/Layout.jsx';
@@ -71,7 +72,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <CurrencyProvider>
+          <RouterProvider router={router} />
+        </CurrencyProvider>
       </ThemeProvider>
     </AuthProvider>
   </React.StrictMode>

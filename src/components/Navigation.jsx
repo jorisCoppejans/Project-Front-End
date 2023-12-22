@@ -2,14 +2,15 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/Theme.context';
 import { IoMoonSharp, IoSunny } from 'react-icons/io5';
 import { useAuth } from '../contexts/Auth.context';
-// import { useCurrency } from '../contexts/Currency.context';
+import { useCurrency } from '../contexts/Currency.context';
+import { useEffect } from 'react';
 
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  // const { Currency, toggleCurrency } = useCurrency();
+  const { Currency, toggleCurrency } = useCurrency();
   const { isAuthed, userFirstname, userLastname } = useAuth();
-  // console.log(Currency);
+
 
   return (
     <nav className={`navbar sticky-top bg-${theme} text-bg-${theme} mb-4`}>
@@ -48,9 +49,9 @@ export default function Navbar() {
             )
         }
 
-        {/* <button className='btn btn-secondary' type='button' onClick={toggleCurrency}>
-          {Currency==="euro" ? "€": "$"}
-        </button> */}
+        <button className='btn btn-secondary' type='button' onClick={toggleCurrency}>
+          {Currency === "€" ? "€": "$"}
+        </button>
 
         <button className="btn btn-secondary" type="button" onClick={toggleTheme}>
           {theme==='dark' ? <IoMoonSharp /> : <IoSunny />}

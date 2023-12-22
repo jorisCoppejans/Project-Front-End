@@ -14,6 +14,7 @@ export default function CoinForm({coin}) {
   const navigate = useNavigate();
   const { theme, oppositeTheme } = useThemeColors();
   const {data: coins = []} = useSWR('coins', getAll);
+  const {data: collections = []} = useSWR('collections', getAll);
   const {data: apiCoins = []} = useSWR('apiCoins', getAll);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -57,6 +58,12 @@ export default function CoinForm({coin}) {
       validate: (value) => {
         const isPositive = isValuePositive(value);
         return isPositive || "the value can't be negative";
+      }
+    },
+    collectionId: {
+      required: "collectionId is required",
+      validate: (value) =>{
+        return collections.filter(c => c.id==value).length !== 0 || "there is no collection with this id"
       }
     }
   };
@@ -126,7 +133,10 @@ export default function CoinForm({coin}) {
           placeholder="collectionId"
           required
         />
+        {errors.collectionId && <p className="error-message">{errors.collectionId.message}</p>}
+
       </div>
+      
 
       <div className="mb-3">
         <label htmlFor="favorite" className="form-label">favorite</label>

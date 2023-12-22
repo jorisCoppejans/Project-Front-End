@@ -43,7 +43,6 @@ export default function Login() {
   const handleLogin = useCallback(
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
-      console.log(loggedIn);
     },
     [login, navigate]
   );
