@@ -23,17 +23,17 @@ export default function CoinForm({coin}) {
   );
 
   
-  const isIdUnique = (id) => {
+  function isIdUnique(id) {
     const ids = coins.map((c) => c.id);
     return !ids.includes(id);
   };
   
-  const isNameUnique = (name) => {
+  function isNameUnique (name) {
     const names = coins.map((c) => c.name);
     return !names.includes(name);
   };
   
-  const isValuePositive = (value) => {
+  function isValuePositive(value) {
     return value >= 0;
   };
   
@@ -69,9 +69,7 @@ export default function CoinForm({coin}) {
   };
 
 
-  const onSubmit = useCallback(async (data) => {
-
-    const { name, collectionId, favorite } = data;
+  const onSubmit = useCallback(async ({ name, collectionId, favorite }) => {
     try{
       await saveCoin({id: coin?.id, name: name, value: 0, collectionId: collectionId, favorite: favorite});
       navigate('/')
@@ -103,6 +101,7 @@ export default function CoinForm({coin}) {
             Name
           </label>
           <input
+          data-cy="coinNameInput"
           key="name"
             type="text"
             {...register('name')}
@@ -111,13 +110,11 @@ export default function CoinForm({coin}) {
             placeholder="Type to filter..."
           />
           <ul>
-            {filteredApiCoins.map((filteredCoin) => (
+            {filteredApiCoins.map((filteredApiCoin) => (
               <li
-                key={filteredCoin.id}
-                onClick={() => setValue('name', filteredCoin.name)}
-              >
-                {filteredCoin.name}
-              </li>
+                key={filteredApiCoin.id}
+                onClick={() => setValue('name', filteredApiCoin.name)}
+              >{filteredApiCoin.name}</li>
             ))}
           </ul>
         </div>
@@ -125,6 +122,7 @@ export default function CoinForm({coin}) {
       <div className="mb-3">
         <label htmlFor="collectionId" className="form-label">collectionId</label>
         <input
+          data-cy="coinCollectionIdInput"
           {...register('collectionId', validationRules.collectionId)}
           defaultValue=''
           id="collectionId"
@@ -156,7 +154,7 @@ export default function CoinForm({coin}) {
             type='submit'
             className='btn btn-primary'
             disabled={isSubmitting}
-            data-cy="submit_coin"
+            data-cy="submitCoin"
           >
             {coin ? "Save coin" : "Add coin"}
           </button>

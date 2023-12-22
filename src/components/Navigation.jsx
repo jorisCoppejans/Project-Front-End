@@ -3,7 +3,6 @@ import { useTheme } from '../contexts/Theme.context';
 import { IoMoonSharp, IoSunny } from 'react-icons/io5';
 import { useAuth } from '../contexts/Auth.context';
 import { useCurrency } from '../contexts/Currency.context';
-import { useEffect } from 'react';
 
 
 export default function Navbar() {

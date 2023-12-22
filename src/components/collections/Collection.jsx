@@ -12,7 +12,6 @@ export default memo(function Collection( {id, onDelete}) {
   const { Currency } = useCurrency();
 
 
-  
   const handleFavoriteCoin = (id, favorite) => {
     const newCoin = coins.map((c) => (c.id === id ? { ...c, favorite } : c));
     mutate('coins', newCoin, false);
@@ -38,7 +37,7 @@ export default memo(function Collection( {id, onDelete}) {
     if (Currency === "$"){
       value *= 1.1; 
     }
-    return value
+    return parseInt(value*100)/100
   }
 
   function handleSign(){

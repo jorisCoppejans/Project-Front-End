@@ -2,9 +2,7 @@ import axiosRoot from 'axios';
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
-export const axios = axiosRoot.create({
-  baseURL: baseUrl,
-});
+export const axios = axiosRoot.create({baseURL: baseUrl});
 
 export const setAuthToken = (token) => {
   if (token) {
@@ -15,9 +13,7 @@ export const setAuthToken = (token) => {
 };
 
 export const getAll = async (url) => {
-  const {
-    data
-  } = await axios.get(`${baseUrl}/${url}`); 
+  const {data} = await axios.get(`${baseUrl}/${url}`); 
   return data.items;
 };
 
@@ -35,17 +31,13 @@ export const save = async (url, { arg: body }) => {
 };
 
 export const post = async (url, { arg }) => {
-  const {
-    data
-  } = await axiosRoot.post(`${baseUrl}/${url}`, arg);
+  const {data} = await axiosRoot.post(`${baseUrl}/${url}`, arg);
 
   return data;
 };
 
 export const getById = async (url) => {
-  const {
-    data,
-  } = await axios.get(`${baseUrl}/${url}`);
+  const {data} = await axios.get(`${baseUrl}/${url}`);
 
   return data;
 };

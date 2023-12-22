@@ -92,18 +92,6 @@ export default function CollectionForm({collection}) {
       <h2 className={`container-xl bg-${theme} text-${oppositeTheme}`}>Add collection</h2>
       <Error error={saveError} />
       <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
-        {/* <div className="mb-3" data-cy= "userIdInput">
-          <label htmlFor="userId" className="form-label">userId</label>
-          <input
-            {...register('userId')}
-            defaultValue=''
-            id="userId"
-            type="text"
-            className="form-control"
-            placeholder="userId"
-            required
-          />
-        </div> */}
 
         <div className='clearfix' data-cy= "submitButton">
           <div className='btn-group float-end'>
@@ -112,6 +100,7 @@ export default function CollectionForm({collection}) {
             </button>
           </div>
         </div>
+
       </form>
     </FormProvider>
   );

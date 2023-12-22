@@ -8,15 +8,16 @@ describe('Add collection', () => {
 
     cy.get("[data-cy=submitButton]").click();
 
-    cy.get("[data-cy=collectionId]").eq(1).contains(1);
-    cy.get("[data-cy=collectionValue]").eq(1).contains('36000');
+
+    cy.get("[data-cy=collectionId]").contains(8);
+    cy.get("[data-cy=collectionValue]").contains('36000');
     cy.get("[data-cy=collection]").should("have.length", 1);
   });
 
 
-  it("should remove the transaction", () => {
+  it("should remove the collection", () => {
     cy.visit("http://localhost:5173/");
     cy.get("[data-cy=collectionRemoveButton]").eq(0).click();
-    cy.get("[data-cy=transaction]").should("have.length", 0);
+    cy.get("[data-cy=collection]").should("have.length", 0);
   });
 });

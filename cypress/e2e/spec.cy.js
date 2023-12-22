@@ -1,7 +1,3 @@
-beforeEach(() => {
-  cy.login('joris.coppejans@yahoo.com', '12345678');
-});
-
 describe('Site beschikbaar?', () => {
   it('doet niet veel', () => {
     cy.visit('http://localhost:5173');

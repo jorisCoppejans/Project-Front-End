@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useContext } from 'react';
 import { ThemeContext } from '../../contexts/Theme.context';
 import CoinForm from '../../components/coins/CoinForm';
 import Coin from '../../components/coins/Coin';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import { getAll, deleteById } from '../../api';
 import useSWRMutation from 'swr/mutation';
 import AsyncData from '../../components/AsyncData';

@@ -28,7 +28,7 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete})
     if (Currency === "$"){
       value *= 1.1; 
     }
-    return value
+    return parseInt(value*100)/100
   }
 
   function handleSign(){
@@ -41,14 +41,14 @@ export default memo(function Coin({id, name, value, favorite, onFavo, onDelete})
 
   return (
       <tr className={`bg-${theme} border-${oppositeTheme} indentedText`}>
-      <td>{name}</td>
-      <td>{handleSign()}{value = handleValue(value)}</td>
-      <td><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
+      <td data-cy="coinName">{name}</td>
+      <td data-cy="coinValue">{handleSign()}{value = handleValue(value)}</td>
+      <td data-cy="coinFavorite"><Favorite selectedFavorite={favorite} onFavo={handleFavoriteCoin} /></td>
       <td>
       <Link type="button" className="btn btn-light" to={`/coins/edit/${id}`}>
         <IoPencil />
       </Link>
-      <button className='btn btn-primary' onClick={handleDeleteCoin}>
+      <button className='btn btn-primary' onClick={handleDeleteCoin} data-cy="coinRemoveButton">
         <IoTrashOutline />
       </button>
       </td>
